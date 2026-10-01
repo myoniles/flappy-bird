@@ -1,6 +1,10 @@
 package ecs
 
-import "log"
+import (
+	"log"
+	"math/rand/v2"
+	"strings"
+)
 
 type ComponentType string
 
@@ -13,8 +17,10 @@ type Entity struct {
 	components map[ComponentType]ComponentTyper
 }
 
-func NewEntity() *Entity {
+func NewEntity(id string) *Entity {
+	newId := generateID(id)
 	return &Entity{
+		id: newId,
 		components: make(map[ComponentType]ComponentTyper),
 	}
 }
@@ -33,4 +39,25 @@ func (e *Entity) GetComponent(c ComponentType) ComponentTyper {
 
 func (e *Entity) AddComponent(ct ComponentTyper) {
 	e.components[ct.Type()] = ct
+}
+
+func (e *Entity) Id() string {
+	return e.id
+}
+
+const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+const suffixLength = 5
+
+func generateID(prefix string) string {
+	var sb strings.Builder
+	sb.Grow(len(prefix) + 1)
+	sb.WriteString(prefix)
+	sb.WriteRune('-')
+	
+	sb.Grow(suffixLength)
+	for range suffixLength {
+		sb.WriteByte(charset[rand.IntN(len(charset))]) 
+	}
+	
+	return sb.String()
 }

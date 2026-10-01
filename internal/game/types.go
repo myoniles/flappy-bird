@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/render"
 	"github.com/myoniles/vulcan/internal/world"
 )
@@ -30,5 +31,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
+	cfg := config.GetWindowConfig()
+	return cfg.LogicalWidth, cfg.LogicalHeight
 }

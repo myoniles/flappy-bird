@@ -5,11 +5,18 @@ import (
 )
 
 type WindowConfig struct {
-	Width  int
-	Height int
+	Width         int
+	Height        int
+	LogicalWidth  int
+	LogicalHeight int
 }
 
 func GetWindowConfig() WindowConfig {
 	viper.Get("window")
-	return WindowConfig{Width: 640, Height: 480}
+	return WindowConfig{
+		Width:         1024,
+		Height:        768,
+		LogicalWidth:  800,
+		LogicalHeight: 600,
+	}
 }

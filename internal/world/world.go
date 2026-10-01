@@ -12,6 +12,7 @@ type World struct {
 func NewWorld() World {
 	w := World{}
 	w.entities = append(w.entities, entity.NewBird())
+	w.entities = append(w.entities, entity.NewPipePair()...)
 	return w
 }
 
