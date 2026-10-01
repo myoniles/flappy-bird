@@ -20,7 +20,7 @@ type Entity struct {
 func NewEntity(id string) *Entity {
 	newId := generateID(id)
 	return &Entity{
-		id: newId,
+		id:         newId,
 		components: make(map[ComponentType]ComponentTyper),
 	}
 }
@@ -30,6 +30,10 @@ func (e *Entity) HasComponent(c ComponentType) bool {
 	return ok
 }
 
+// GetComponent returns the stored ComponentTyper. Components should be added
+// as pointers (e.g. &component.Velocity{...}) so the returned interface can
+// be type-asserted back to that pointer type and mutated in place, with no
+// write-back needed.
 func (e *Entity) GetComponent(c ComponentType) ComponentTyper {
 	if !e.HasComponent(c) {
 		log.Fatalf("Component %s trying to access component that it does not have: %s", e.id, c)
