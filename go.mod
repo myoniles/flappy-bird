@@ -3,6 +3,7 @@ module github.com/myoniles/vulcan
 go 1.27.1
 
 require (
+	github.com/hajimehoshi/ebiten v1.12.13
 	github.com/hajimehoshi/ebiten/v2 v2.10.4
 	github.com/spf13/viper v1.21.0
 )
