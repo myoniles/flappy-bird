@@ -26,8 +26,9 @@ func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
 
 	spriteImage := ebiten.NewImageFromImage(*s.Img)
 	w, h := spriteImage.Bounds().Dx(), spriteImage.Bounds().Dy()
-	op.GeoM.Translate(-float64(t.X)/2.0, -float64(t.Y)/2.0)
-	op.GeoM.Translate(float64(w)/2.0, float64(h)/2.0)
+	// Treat (t.X, t.Y) as the entity's center, not its top-left corner.
+	op.GeoM.Translate(-float64(w)/2.0, -float64(h)/2.0)
+	op.GeoM.Translate(float64(t.X), float64(t.Y))
 	op.Filter = ebiten.FilterLinear
 
 	screen.DrawImage(spriteImage, op)
