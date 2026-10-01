@@ -1,7 +1,6 @@
 package render
 
 import (
-
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world"

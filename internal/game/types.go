@@ -9,7 +9,7 @@ import (
 )
 
 type Game struct {
-	Mode GameMode
+	Mode  GameMode
 	World world.World
 }
 
@@ -19,7 +19,6 @@ func NewGame() *Game {
 	g.World = world.NewWorld()
 	return &g
 }
-
 
 func (g *Game) Update() error {
 	return nil

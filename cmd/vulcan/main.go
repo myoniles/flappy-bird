@@ -10,7 +10,7 @@ import (
 
 func main() {
 	windowConf := cfg.GetWindowConfig()
-	ebiten.SetWindowSize(windowConf.Width , windowConf.Height)
+	ebiten.SetWindowSize(windowConf.Width, windowConf.Height)
 	ebiten.SetWindowTitle("Vulcan")
 	if err := ebiten.RunGame(game.NewGame()); err != nil {
 		log.Fatal(err)
