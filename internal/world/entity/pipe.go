@@ -15,7 +15,7 @@ import (
 const (
 	PipePrefix = "pipe"
 	PipeWidth  = 50
-	GapHeight  = 50
+	GapHeight  = 150
 )
 
 var PipeGap = config.GetWindowConfig().LogicalWidth / 4
@@ -35,12 +35,14 @@ func NewPipePair() []*ecs.Entity {
 	offset := rand.IntN(3 * windowConf.LogicalHeight / 4)
 	topImg, bottomImg := bodyPairs(offset)
 
+	bottomHeight := bottomImg.Bounds().Dy()
+
 	top := ecs.NewEntity(PipePrefix)
-	top.AddComponent(component.Position{X: windowConf.LogicalWidth/2, Y: offset/2})
+	top.AddComponent(component.Position{X: windowConf.LogicalWidth, Y: offset / 2})
 	top.AddComponent(component.NewStaticSprite(&topImg))
 
 	bottom := ecs.NewEntity(PipePrefix)
-	bottom.AddComponent(component.Position{X: windowConf.LogicalWidth/2 - PipeGap, Y: windowConf.LogicalHeight - (GapHeight + offset) / 2})
+	bottom.AddComponent(component.Position{X: windowConf.LogicalWidth, Y: windowConf.LogicalHeight - bottomHeight/2})
 	bottom.AddComponent(component.NewStaticSprite(&bottomImg))
 
 	return []*ecs.Entity{top, bottom}
