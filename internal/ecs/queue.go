@@ -1,4 +1,4 @@
-package world
+package ecs
 
 type Event struct {
 	Subject, Object, Verb any
@@ -12,8 +12,7 @@ func (q *EventQueue) Enqueue(e Event) {
 	q.events = append(q.events, e)
 }
 
-func (q *EventQueue) Dequeue(e Event) (Event, bool) {
-	q.events = append(q.events, e)
+func (q *EventQueue) Dequeue() (Event, bool) {
 	if len(q.events) == 0 {
 		var zero Event
 		return zero, false

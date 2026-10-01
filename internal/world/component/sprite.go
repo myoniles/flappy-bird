@@ -1,16 +1,20 @@
 package component
 
-import "github.com/myoniles/vulcan/internal/world"
+import (
+	"image"
+
+	"github.com/myoniles/vulcan/internal/ecs"
+)
 
 // We are only using static sprites, I am sure this is more complicated than what I am doing
 type Sprite struct {
-	img []byte
+	Img *image.Image
 }
 
-func NewStaticSprite(s []byte) Sprite {
-	return Sprite{s}
+func NewStaticSprite(i *image.Image) Sprite {
+	return Sprite{i}
 }
 
-func (s Sprite) Type() world.ComponentType {
-	return "sprite"
+func (s Sprite) Type() ecs.ComponentType {
+	return "Sprite"
 }

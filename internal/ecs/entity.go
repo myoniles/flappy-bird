@@ -1,4 +1,4 @@
-package world
+package ecs
 
 import "log"
 
@@ -11,6 +11,12 @@ type ComponentTyper interface {
 type Entity struct {
 	id         string
 	components map[ComponentType]ComponentTyper
+}
+
+func NewEntity() *Entity {
+	return &Entity{
+		components: make(map[ComponentType]ComponentTyper),
+	}
 }
 
 func (e *Entity) HasComponent(c ComponentType) bool {

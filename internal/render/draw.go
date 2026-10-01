@@ -1,0 +1,34 @@
+package render
+
+import (
+
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/myoniles/vulcan/internal/ecs"
+	"github.com/myoniles/vulcan/internal/world"
+	"github.com/myoniles/vulcan/internal/world/component"
+)
+
+func RenderWorld(w world.World, screen *ebiten.Image) {
+	for _, e := range w.Entities() {
+		renderSprite(e, screen)
+	}
+}
+
+func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
+	if !e.HasComponent("Sprite") || !e.HasComponent("Transform") {
+		return
+	}
+
+	s := e.GetComponent("Sprite").(component.Sprite)
+	t := e.GetComponent("Transform").(component.Position)
+
+	op := &ebiten.DrawImageOptions{}
+
+	spriteImage := ebiten.NewImageFromImage(*s.Img)
+	w, h := spriteImage.Bounds().Dx(), spriteImage.Bounds().Dy()
+	op.GeoM.Translate(-float64(t.X)/2.0, -float64(t.Y)/2.0)
+	op.GeoM.Translate(float64(w)/2.0, float64(h)/2.0)
+	op.Filter = ebiten.FilterLinear
+
+	screen.DrawImage(spriteImage, op)
+}

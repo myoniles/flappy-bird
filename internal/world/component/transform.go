@@ -1,6 +1,6 @@
 package component
 
-import "github.com/myoniles/vulcan/internal/world"
+import "github.com/myoniles/vulcan/internal/ecs"
 
 type Position struct {
 	X, Y     int
@@ -8,6 +8,6 @@ type Position struct {
 	scale    float32
 }
 
-func (p Position) Type() world.ComponentType {
+func (p Position) Type() ecs.ComponentType {
 	return "Transform"
 }

@@ -1,15 +1,18 @@
 package world
 
-import "github.com/myoniles/vulcan/internal/world/entity"
+import (
+	"github.com/myoniles/vulcan/internal/ecs"
+	"github.com/myoniles/vulcan/internal/world/entity"
+)
 
 type World struct {
-	entities []*Entity
+	entities []*ecs.Entity
 }
 
-func NewWord() World {
+func NewWorld() World {
 	w := World{}
 	w.entities = append(w.entities, entity.NewBird())
-
+	return w
 }
 
 func (w *World) Update(in any) { // TODO make some sort of input state
@@ -21,4 +24,8 @@ func (w *World) Update(in any) { // TODO make some sort of input state
 		w.processEvents()
 		w.cleanUp()
 	*/
+}
+
+func (w World) Entities() []*ecs.Entity {
+	return w.entities
 }
