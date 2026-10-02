@@ -2,12 +2,12 @@ package component
 
 import "github.com/myoniles/vulcan/internal/ecs"
 
-type Position struct {
+type Transform struct {
 	X, Y     int
 	rotation float32
 	scale    float32
 }
 
-func (p Position) Type() ecs.ComponentType {
+func (p Transform) Type() ecs.ComponentType {
 	return "Transform"
 }

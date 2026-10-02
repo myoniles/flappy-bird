@@ -27,7 +27,7 @@ type Pipe struct {
 
 type halfPipe struct {
 	component.Sprite
-	component.Position
+	component.Transform
 }
 
 func NewPipePair() []*ecs.Entity {
@@ -38,11 +38,11 @@ func NewPipePair() []*ecs.Entity {
 	bottomHeight := bottomImg.Bounds().Dy()
 
 	top := ecs.NewEntity(PipePrefix)
-	top.AddComponent(&component.Position{X: windowConf.LogicalWidth, Y: offset / 2})
+	top.AddComponent(&component.Transform{X: windowConf.LogicalWidth, Y: offset / 2})
 	top.AddComponent(component.NewStaticSprite(&topImg))
 
 	bottom := ecs.NewEntity(PipePrefix)
-	bottom.AddComponent(&component.Position{X: windowConf.LogicalWidth, Y: windowConf.LogicalHeight - bottomHeight/2})
+	bottom.AddComponent(&component.Transform{X: windowConf.LogicalWidth, Y: windowConf.LogicalHeight - bottomHeight/2})
 	bottom.AddComponent(component.NewStaticSprite(&bottomImg))
 
 	return []*ecs.Entity{top, bottom}
