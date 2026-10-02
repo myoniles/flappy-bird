@@ -7,7 +7,7 @@ import (
 
 type GravitySystem struct{}
 
-func (g GravitySystem) Update(entries []*ecs.Entity) {
+func (g GravitySystem) Update(entries []*ecs.Entity, q *ecs.EventQueue) {
 	for _, e := range entries {
 		if !e.HasComponent("Transform") || !e.HasComponent("Velocity") || !e.HasComponent("Gravity") {
 			continue

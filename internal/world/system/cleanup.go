@@ -1,15 +1,49 @@
 package system
 
 import (
+	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/ecs"
+	"github.com/myoniles/vulcan/internal/world/component"
 )
 
-type CleanupSystem struct {}
+var OutOfBoundsEvent ecs.EventType = "OutOfBoundsEvent"
 
-func (c CleanupSystem) Update(entities []*ecs.Entity) {
+// TODO move to config
+const OOBMod = 250
+
+type CleanupSystem struct{}
+
+func (c CleanupSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 	for _, e := range entities {
 		if !e.HasComponent("Transform") {
 			continue
 		}
+		t := e.GetComponent("Transform").(*component.Transform)
+		if isOutOfBounds(t.X, t.Y) {
+			event := ecs.Event{Subject: e, Verb: OutOfBoundsEvent}
+			q.Enqueue(event)
+		}
 	}
+}
+
+func isOutOfBounds(x, y int) bool {
+	windowConf := config.GetWindowConfig()
+	// keep it stupid simple, just go off of an arbitrary position
+	if x > windowConf.LogicalWidth+OOBMod {
+		return true
+	}
+
+	if y > windowConf.LogicalHeight+OOBMod {
+		return true
+	}
+
+	if x < -OOBMod {
+		return true
+	}
+
+	if y < -OOBMod {
+		return true
+	}
+
+	return false
 }

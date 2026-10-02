@@ -1,7 +1,11 @@
 package ecs
 
+type EventType string
+
 type Event struct {
-	Subject, Object, Verb any
+	Subject *Entity
+	Object *Entity
+	Verb EventType
 }
 
 type EventQueue struct {
