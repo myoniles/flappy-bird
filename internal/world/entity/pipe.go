@@ -40,10 +40,12 @@ func NewPipePair() []*ecs.Entity {
 	top := ecs.NewEntity(PipePrefix)
 	top.AddComponent(&component.Transform{X: windowConf.LogicalWidth, Y: offset / 2})
 	top.AddComponent(component.NewStaticSprite(&topImg))
+	top.AddComponent(&component.Velocity{X: -5.0, Y:0})
 
 	bottom := ecs.NewEntity(PipePrefix)
 	bottom.AddComponent(&component.Transform{X: windowConf.LogicalWidth, Y: windowConf.LogicalHeight - bottomHeight/2})
 	bottom.AddComponent(component.NewStaticSprite(&bottomImg))
+	bottom.AddComponent(&component.Velocity{X: -5.0, Y:0})
 
 	return []*ecs.Entity{top, bottom}
 }

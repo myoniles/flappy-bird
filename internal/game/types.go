@@ -22,6 +22,7 @@ func NewGame() *Game {
 }
 
 func (g *Game) Update() error {
+	g.World.Update("")
 	return nil
 }
 

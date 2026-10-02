@@ -16,6 +16,7 @@ func NewWorld() World {
 	w.entities = append(w.entities, entity.NewBird())
 	w.entities = append(w.entities, entity.NewPipePair()...)
 	w.systems = append(w.systems, system.GravitySystem{})
+	w.systems = append(w.systems, system.MovementSystem{})
 	return w
 }
 
