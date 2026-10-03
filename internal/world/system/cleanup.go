@@ -1,12 +1,24 @@
 package system
 
 import (
+	"slices"
+
 	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
 var OutOfBoundsEvent ecs.EventType = "OutOfBoundsEvent"
+
+func init() {
+	Handlers[OutOfBoundsEvent] = append(Handlers[OutOfBoundsEvent], HandleOutOfBounds)
+}
+
+func HandleOutOfBounds(entities *[]*ecs.Entity, e ecs.Event) {
+	*entities = slices.DeleteFunc(*entities, func(x *ecs.Entity) bool {
+		return x == e.Subject
+	})
+}
 
 // TODO move to config
 const OOBMod = 250

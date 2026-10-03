@@ -1,8 +1,6 @@
 package world
 
 import (
-	"slices"
-
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/entity"
 	"github.com/myoniles/vulcan/internal/world/system"
@@ -52,11 +50,8 @@ func (w *World) processEvent() {
 			break
 		}
 
-		switch event.Verb {
-		case system.OutOfBoundsEvent:
-			w.entities = slices.DeleteFunc(w.entities, func(e *ecs.Entity) bool {
-				return e == event.Subject
-			})
+		for _, handler := range system.Handlers[event.Verb] {
+			handler(&w.entities, event)
 		}
 	}
 }
