@@ -1,6 +1,7 @@
 package world
 
 import (
+	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
 	"github.com/myoniles/vulcan/internal/world/entity"
@@ -21,7 +22,12 @@ func NewWorld() World {
 	w.entities = append(w.entities, entity.NewPipePair()...)
 	w.systems = append(w.systems, system.GravitySystem{})
 	w.systems = append(w.systems, system.MovementSystem{})
+	w.systems = append(w.systems, system.CollisionSystem{})
 	w.systems = append(w.systems, system.CleanupSystem{})
+
+	windowConf := config.GetWindowConfig()
+	w.entities = append(w.entities, entity.NewHorizontal(0))
+	w.entities = append(w.entities, entity.NewHorizontal(windowConf.LogicalHeight))
 	w.systems = append(w.systems, system.SpawnSystem{})
 
 	pipeSpawner := ecs.NewEntity("pipe-spawner")
