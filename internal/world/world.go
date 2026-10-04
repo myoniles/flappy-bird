@@ -3,6 +3,7 @@ package world
 import (
 	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/ecs"
+	"github.com/myoniles/vulcan/internal/input"
 	"github.com/myoniles/vulcan/internal/world/component"
 	"github.com/myoniles/vulcan/internal/world/entity"
 	"github.com/myoniles/vulcan/internal/world/system"
@@ -36,26 +37,22 @@ func NewWorld() World {
 	return w
 }
 
-func (w *World) Update(in any) { // TODO make some sort of input state
+func (w *World) Update(in input.State) {
+	if in.JustPressed(input.Flap) {
+		w.queue.Enqueue(ecs.Event{Verb: system.FlapEvent})
+	}
+
 	for _, s := range w.systems {
 		s.Update(w.entities, w.queue)
 	}
-	w.processEvent()
-	/*
-		w.applyInput(in)
-		w.updateAI(in) N
-		w.integrate(in)
-		w.resolveCollisions(in)
-		w.processEvents()
-		w.cleanUp()
-	*/
+	w.processEvents()
 }
 
 func (w World) Entities() []*ecs.Entity {
 	return w.entities
 }
 
-func (w *World) processEvent() {
+func (w *World) processEvents() {
 	for {
 		event, ok := w.queue.Dequeue()
 		if !ok {
