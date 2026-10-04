@@ -15,10 +15,10 @@ type SpawnSystem struct{}
 
 func (s SpawnSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 	for _, e := range entities {
-		if !e.HasComponent("Spawner") {
+		if !e.HasComponent(component.SpawnerType) {
 			continue
 		}
-		sp := e.GetComponent("Spawner").(*component.Spawner)
+		sp := e.GetComponent(component.SpawnerType).(*component.Spawner)
 		sp.Elapsed++
 		if sp.Elapsed >= sp.Interval {
 			sp.Elapsed = 0
@@ -31,6 +31,6 @@ func (s SpawnSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 }
 
 func HandleSpawn(entities *[]*ecs.Entity, e ecs.Event) {
-	sp := e.Subject.GetComponent("Spawner").(*component.Spawner)
+	sp := e.Subject.GetComponent(component.SpawnerType).(*component.Spawner)
 	*entities = append(*entities, sp.Factory()...)
 }

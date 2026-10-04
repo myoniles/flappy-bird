@@ -14,12 +14,12 @@ func RenderWorld(w world.World, screen *ebiten.Image) {
 }
 
 func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
-	if !e.HasComponent("Sprite") || !e.HasComponent("Transform") {
+	if !e.HasComponent(component.SpriteType) || !e.HasComponent(component.TransformType) {
 		return
 	}
 
-	s := e.GetComponent("Sprite").(component.Sprite)
-	t := e.GetComponent("Transform").(*component.Transform)
+	s := e.GetComponent(component.SpriteType).(component.Sprite)
+	t := e.GetComponent(component.TransformType).(*component.Transform)
 
 	op := &ebiten.DrawImageOptions{}
 

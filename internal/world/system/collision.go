@@ -21,7 +21,7 @@ func (c CollisionSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 				continue
 			}
 			// two static things (e.g. a wall and the floor) touching is not news
-			if !e.HasComponent("Velocity") && !other.HasComponent("Velocity") {
+			if !e.HasComponent(component.VelocityType) && !other.HasComponent(component.VelocityType) {
 				continue
 			}
 			if isColliding(e, other) {
@@ -37,15 +37,15 @@ func (c CollisionSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 }
 
 func isCollidable(e *ecs.Entity) bool {
-	return e.HasComponent("Collider") && e.HasComponent("Transform")
+	return e.HasComponent(component.ColliderType) && e.HasComponent(component.TransformType)
 }
 
 func isColliding(e1 *ecs.Entity, e2 *ecs.Entity) bool {
-	t1 := e1.GetComponent("Transform").(*component.Transform)
-	t2 := e2.GetComponent("Transform").(*component.Transform)
+	t1 := e1.GetComponent(component.TransformType).(*component.Transform)
+	t2 := e2.GetComponent(component.TransformType).(*component.Transform)
 
-	b1 := e1.GetComponent("Collider").(*component.Collider)
-	b2 := e2.GetComponent("Collider").(*component.Collider)
+	b1 := e1.GetComponent(component.ColliderType).(*component.Collider)
+	b2 := e2.GetComponent(component.ColliderType).(*component.Collider)
 
 	// Both transforms and colliders are centered, so two boxes overlap on an
 	// axis when the distance between centers is less than the sum of their

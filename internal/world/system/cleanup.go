@@ -27,10 +27,10 @@ type CleanupSystem struct{}
 
 func (c CleanupSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 	for _, e := range entities {
-		if !e.HasComponent("Transform") {
+		if !e.HasComponent(component.TransformType) {
 			continue
 		}
-		t := e.GetComponent("Transform").(*component.Transform)
+		t := e.GetComponent(component.TransformType).(*component.Transform)
 		if isOutOfBounds(t.X, t.Y) {
 			event := ecs.Event{Subject: e, Verb: OutOfBoundsEvent}
 			q.Enqueue(event)

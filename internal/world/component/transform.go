@@ -2,6 +2,8 @@ package component
 
 import "github.com/myoniles/vulcan/internal/ecs"
 
+const TransformType ecs.ComponentType = "Transform"
+
 type Transform struct {
 	X, Y     int
 	rotation float32
@@ -9,5 +11,5 @@ type Transform struct {
 }
 
 func (p Transform) Type() ecs.ComponentType {
-	return "Transform"
+	return TransformType
 }
