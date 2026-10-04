@@ -2,6 +2,7 @@ package world
 
 import (
 	"github.com/myoniles/vulcan/internal/ecs"
+	"github.com/myoniles/vulcan/internal/world/component"
 	"github.com/myoniles/vulcan/internal/world/entity"
 	"github.com/myoniles/vulcan/internal/world/system"
 )
@@ -21,6 +22,11 @@ func NewWorld() World {
 	w.systems = append(w.systems, system.GravitySystem{})
 	w.systems = append(w.systems, system.MovementSystem{})
 	w.systems = append(w.systems, system.CleanupSystem{})
+	w.systems = append(w.systems, system.SpawnSystem{})
+
+	pipeSpawner := ecs.NewEntity("pipe-spawner")
+	pipeSpawner.AddComponent(&component.Spawner{Interval: 90, Factory: entity.NewPipePair})
+	w.entities = append(w.entities, pipeSpawner)
 	return w
 }
 

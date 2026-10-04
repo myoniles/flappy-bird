@@ -12,6 +12,7 @@ import (
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
+// TODO move to config
 const (
 	PipePrefix = "pipe"
 	PipeWidth  = 50
@@ -36,16 +37,17 @@ func NewPipePair() []*ecs.Entity {
 	topImg, bottomImg := bodyPairs(offset)
 
 	bottomHeight := bottomImg.Bounds().Dy()
+	xIndex := windowConf.LogicalWidth + PipeWidth/2
 
 	top := ecs.NewEntity(PipePrefix)
-	top.AddComponent(&component.Transform{X: windowConf.LogicalWidth, Y: offset / 2})
+	top.AddComponent(&component.Transform{X: xIndex, Y: offset / 2})
 	top.AddComponent(component.NewStaticSprite(&topImg))
-	top.AddComponent(&component.Velocity{X: -5.0, Y:0})
+	top.AddComponent(&component.Velocity{X: -5.0, Y: 0})
 
 	bottom := ecs.NewEntity(PipePrefix)
-	bottom.AddComponent(&component.Transform{X: windowConf.LogicalWidth, Y: windowConf.LogicalHeight - bottomHeight/2})
+	bottom.AddComponent(&component.Transform{X: xIndex, Y: windowConf.LogicalHeight - bottomHeight/2})
 	bottom.AddComponent(component.NewStaticSprite(&bottomImg))
-	bottom.AddComponent(&component.Velocity{X: -5.0, Y:0})
+	bottom.AddComponent(&component.Velocity{X: -5.0, Y: 0})
 
 	return []*ecs.Entity{top, bottom}
 }
@@ -53,11 +55,11 @@ func NewPipePair() []*ecs.Entity {
 func bodyPairs(offset int) (image.Image, image.Image) {
 	windowConf := config.GetWindowConfig()
 	topImg := pipeBody(offset, true)
-	bottomImg := pipeBody(windowConf.LogicalHeight - (offset + GapHeight), false)
+	bottomImg := pipeBody(windowConf.LogicalHeight-(offset+GapHeight), false)
 	return topImg, bottomImg
 }
 
-func pipeBody(height int, top bool) (image.Image) {
+func pipeBody(height int, top bool) image.Image {
 	log.Print("Rendering Pipe image\n")
 	r := image.Rect(0, 0, PipeWidth, height)
 	rgba := image.NewRGBA(r)

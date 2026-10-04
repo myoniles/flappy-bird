@@ -41,6 +41,8 @@ func (c CleanupSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 func isOutOfBounds(x, y int) bool {
 	windowConf := config.GetWindowConfig()
 	// keep it stupid simple, just go off of an arbitrary position
+	// but in all honesty I want the complexity
+	// TODO MORE COMPLEX FOR NO REASON! USE SPRITE BOUNDING BOX FOR EFFICIENCY!!
 	if x > windowConf.LogicalWidth+OOBMod {
 		return true
 	}
