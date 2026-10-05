@@ -22,7 +22,9 @@ func NewGame() *Game {
 }
 
 func (g *Game) Update() error {
-	g.World.Update(poll())
+	if !g.World.Lost() {
+		g.World.Update(poll())
+	}
 	return nil
 }
 

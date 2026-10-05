@@ -50,7 +50,7 @@ func NewPipePair() []*ecs.Entity {
 	bottom.AddComponent(component.NewStaticSprite(&bottomImg))
 	bottom.AddComponent(&component.Velocity{X: -5.0, Y: 0})
 	bottom.AddComponent(&component.Poisoner{})
-	top.AddComponent(&component.Collider{Width: PipeWidth, Height: bottomHeight, Layer: component.LayerObstacle})
+	bottom.AddComponent(&component.Collider{Width: PipeWidth, Height: bottomHeight, Layer: component.LayerObstacle})
 
 	return []*ecs.Entity{top, bottom}
 }

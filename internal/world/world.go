@@ -12,10 +12,11 @@ type World struct {
 	entities []*ecs.Entity
 	systems  []ecs.System
 	queue    *ecs.EventQueue
+	gameLost bool
 }
 
 func NewWorld() World {
-	w := World{}
+	w := World{gameLost: false}
 	queue := ecs.EventQueue{}
 	w.queue = &queue
 	w.entities = append(w.entities, entity.NewBird())
@@ -50,11 +51,19 @@ func (w World) Entities() []*ecs.Entity {
 	return w.entities
 }
 
+func (w World) Lost() bool {
+	return w.gameLost
+}
+
 func (w *World) processEvents() {
 	for {
 		event, ok := w.queue.Dequeue()
 		if !ok {
 			break
+		}
+
+		if event.Verb == system.GameLossEvent {
+			w.gameLost = true
 		}
 
 		for _, handler := range system.Handlers[event.Verb] {

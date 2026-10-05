@@ -102,7 +102,6 @@ func HandleBlockBack(entities *[]*ecs.Entity, event ecs.Event) {
 		v1 := event.Subject.GetComponent(component.VelocityType).(*component.Velocity)
 		v1.X = 0
 		v1.Y = 0
-
 	}
 
 }
