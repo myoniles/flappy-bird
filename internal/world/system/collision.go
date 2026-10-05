@@ -114,5 +114,6 @@ func HandleGameLoss(entities *[]*ecs.Entity, event ecs.Event) {
 	//		v.Y = 0
 	//	}
 	//}
+	// TODO there is probably a better way to HandleGameLoss then what is in world
 	log.Print("GAME OVER")
 }

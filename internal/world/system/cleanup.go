@@ -8,10 +8,10 @@ import (
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
-var OutOfBoundsEvent ecs.EventType = "OutOfBoundsEvent"
+var DestroyEvent ecs.EventType = "Destroy"
 
 func init() {
-	Handlers[OutOfBoundsEvent] = append(Handlers[OutOfBoundsEvent], HandleOutOfBounds)
+	Handlers[DestroyEvent] = append(Handlers[DestroyEvent], HandleOutOfBounds)
 }
 
 func HandleOutOfBounds(entities *[]*ecs.Entity, e ecs.Event) {
@@ -32,7 +32,7 @@ func (c CleanupSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 		}
 		t := e.GetComponent(component.TransformType).(*component.Transform)
 		if isOutOfBounds(t.X, t.Y) {
-			event := ecs.Event{Subject: e, Verb: OutOfBoundsEvent}
+			event := ecs.Event{Subject: e, Verb: DestroyEvent}
 			q.Enqueue(event)
 		}
 	}

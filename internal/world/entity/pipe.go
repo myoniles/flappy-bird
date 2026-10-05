@@ -13,16 +13,18 @@ import (
 
 // TODO move to config
 const (
-	PipePrefix = "pipe"
-	PipeWidth  = 50
-	GapHeight  = 150
+	PipePrefix  = "pipe"
+	ScorePrefix = "coin"
+	PipeWidth   = 50
+	GapHeight   = 150
 )
 
 var PipeGap = config.GetWindowConfig().LogicalWidth / 4
 
 type Pipe struct {
-	Top    halfPipe
-	Bottom halfPipe
+	Top       halfPipe
+	Bottom    halfPipe
+	Invisible ecs.Entity
 }
 
 type halfPipe struct {
@@ -38,19 +40,41 @@ func NewPipePair() []*ecs.Entity {
 	bottomHeight := bottomImg.Bounds().Dy()
 	xIndex := windowConf.LogicalWidth + PipeWidth/2
 
+	v := &component.Velocity{X: -5, Y: 0}
+	p := &component.Poisoner{}
+
 	top := ecs.NewEntity(PipePrefix)
+	top.AddComponent(v)
+	top.AddComponent(p)
 	top.AddComponent(&component.Transform{X: xIndex, Y: offset / 2})
 	top.AddComponent(component.NewStaticSprite(&topImg))
-	top.AddComponent(&component.Velocity{X: -5.0, Y: 0})
-	top.AddComponent(&component.Poisoner{})
-	top.AddComponent(&component.Collider{Width: PipeWidth, Height: offset, Layer: component.LayerObstacle})
+	top.AddComponent(
+		&component.Collider{
+			Width:  PipeWidth,
+			Height: offset,
+			Layer:  component.LayerObstacle,
+		})
 
 	bottom := ecs.NewEntity(PipePrefix)
-	bottom.AddComponent(&component.Transform{X: xIndex, Y: windowConf.LogicalHeight - bottomHeight/2})
+	bottom.AddComponent(v)
+	bottom.AddComponent(p)
+	bottom.AddComponent(
+		&component.Transform{
+			X: xIndex,
+			Y: windowConf.LogicalHeight - bottomHeight/2,
+		})
 	bottom.AddComponent(component.NewStaticSprite(&bottomImg))
-	bottom.AddComponent(&component.Velocity{X: -5.0, Y: 0})
-	bottom.AddComponent(&component.Poisoner{})
-	bottom.AddComponent(&component.Collider{Width: PipeWidth, Height: bottomHeight, Layer: component.LayerObstacle})
+	bottom.AddComponent(
+		&component.Collider{
+			Width:  PipeWidth,
+			Height: bottomHeight,
+			Layer:  component.LayerObstacle,
+		})
+
+	// What actually scores the player a point
+	inv := ecs.NewEntity(ScorePrefix)
+	inv.AddComponent(&component.Collider{Width: PipeWidth, Height: GapHeight})
+	inv.AddComponent(&component.Transform{X: xIndex, Y: offset + GapHeight / 2})
 
 	return []*ecs.Entity{top, bottom}
 }
