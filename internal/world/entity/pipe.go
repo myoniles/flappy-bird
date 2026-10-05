@@ -4,7 +4,6 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
-	"log"
 	"math/rand/v2"
 
 	"github.com/myoniles/vulcan/internal/config"
@@ -43,32 +42,31 @@ func NewPipePair() []*ecs.Entity {
 	top.AddComponent(&component.Transform{X: xIndex, Y: offset / 2})
 	top.AddComponent(component.NewStaticSprite(&topImg))
 	top.AddComponent(&component.Velocity{X: -5.0, Y: 0})
+	top.AddComponent(&component.Poisoner{})
+	top.AddComponent(&component.Collider{Width: PipeWidth, Height: offset, Layer: component.LayerObstacle})
 
 	bottom := ecs.NewEntity(PipePrefix)
 	bottom.AddComponent(&component.Transform{X: xIndex, Y: windowConf.LogicalHeight - bottomHeight/2})
 	bottom.AddComponent(component.NewStaticSprite(&bottomImg))
 	bottom.AddComponent(&component.Velocity{X: -5.0, Y: 0})
+	bottom.AddComponent(&component.Poisoner{})
+	top.AddComponent(&component.Collider{Width: PipeWidth, Height: bottomHeight, Layer: component.LayerObstacle})
 
 	return []*ecs.Entity{top, bottom}
 }
 
 func bodyPairs(offset int) (image.Image, image.Image) {
 	windowConf := config.GetWindowConfig()
-	topImg := pipeBody(offset, true)
-	bottomImg := pipeBody(windowConf.LogicalHeight-(offset+GapHeight), false)
+	topImg := pipeBody(offset)
+	bottomImg := pipeBody(windowConf.LogicalHeight - (offset + GapHeight))
 	return topImg, bottomImg
 }
 
-func pipeBody(height int, top bool) image.Image {
-	log.Print("Rendering Pipe image\n")
+func pipeBody(height int) image.Image {
 	r := image.Rect(0, 0, PipeWidth, height)
 	rgba := image.NewRGBA(r)
 	var green color.Color
-	if top {
-		green = color.RGBA{0, 255, 0, 255}
-	} else {
-		green = color.RGBA{255, 0, 0, 255}
-	}
+	green = color.RGBA{0, 255, 0, 255}
 	greenSource := image.NewUniform(green)
 	// This writes to rgba
 	draw.Draw(rgba, r.Bounds(), greenSource, image.Point{}, draw.Src)

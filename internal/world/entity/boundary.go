@@ -31,3 +31,20 @@ func NewHorizontal(y int) *ecs.Entity {
 	e.AddComponent(&component.Collider{Width: windowConf.LogicalWidth, Height: BoundaryThickness})
 	return e
 }
+
+func NewCeiling() *ecs.Entity {
+
+	windowConf := config.GetWindowConfig()
+
+	e := NewHorizontal(0)
+	e.AddComponent(&component.Collider{Height: 1, Width: windowConf.LogicalWidth, Layer: component.LayerBoundary})
+	return e
+}
+
+func NewFloor() *ecs.Entity {
+	windowConf := config.GetWindowConfig()
+	e := NewHorizontal(windowConf.LogicalHeight)
+	e.AddComponent(&component.Collider{Height: 1, Width: windowConf.LogicalWidth, Layer: component.LayerBoundary})
+	e.AddComponent(component.Poisoner{})
+	return e
+}

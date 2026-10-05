@@ -1,13 +1,21 @@
 package system
 
 import (
+	"log"
+
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
+func init() {
+	Handlers[CollisionEvent] = append(Handlers[CollisionEvent], HandleBlockBack)
+	Handlers[GameLossEvent] = append(Handlers[GameLossEvent], HandleGameLoss)
+}
+
 type CollisionSystem struct{}
 
 const CollisionEvent ecs.EventType = "CollisionEvent"
+const GameLossEvent ecs.EventType = "GameOver"
 
 func (c CollisionSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 	for i, e := range entities {
@@ -31,6 +39,10 @@ func (c CollisionSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 					Verb:    CollisionEvent,
 				}
 				q.Enqueue(event)
+
+				if hasPoisoned(e, other) {
+					q.Enqueue(ecs.Event{Verb: GameLossEvent})
+				}
 			}
 		}
 	}
@@ -41,11 +53,16 @@ func isCollidable(e *ecs.Entity) bool {
 }
 
 func isColliding(e1 *ecs.Entity, e2 *ecs.Entity) bool {
-	t1 := e1.GetComponent(component.TransformType).(*component.Transform)
-	t2 := e2.GetComponent(component.TransformType).(*component.Transform)
-
 	b1 := e1.GetComponent(component.ColliderType).(*component.Collider)
 	b2 := e2.GetComponent(component.ColliderType).(*component.Collider)
+
+	// Check if they *can* even collide based on their layers
+	if b1.Mask & b2.Layer == 0 && b2.Mask & b1.Layer == 0 {
+		return false
+	}
+
+	t1 := e1.GetComponent(component.TransformType).(*component.Transform)
+	t2 := e2.GetComponent(component.TransformType).(*component.Transform)
 
 	// Both transforms and colliders are centered, so two boxes overlap on an
 	// axis when the distance between centers is less than the sum of their
@@ -61,4 +78,42 @@ func abs(x int) int {
 		return -x
 	}
 	return x
+}
+
+func hasPoisoned(e, other *ecs.Entity) bool {
+	if e.HasComponent(component.PoisoneeType) && other.HasComponent(component.PoisonerType) {
+		return true
+	}
+	if e.HasComponent(component.PoisonerType) && other.HasComponent(component.PoisoneeType) {
+		return true
+	}
+	return false
+}
+
+func HandleBlockBack(entities *[]*ecs.Entity, event ecs.Event) {
+	if event.Object.HasComponent(component.VelocityType) {
+		v1 := event.Object.GetComponent(component.VelocityType).(*component.Velocity)
+		v1.X = 0
+		v1.Y = 0
+
+	}
+
+	if event.Subject.HasComponent(component.VelocityType) {
+		v1 := event.Subject.GetComponent(component.VelocityType).(*component.Velocity)
+		v1.X = 0
+		v1.Y = 0
+
+	}
+
+}
+
+func HandleGameLoss(entities *[]*ecs.Entity, event ecs.Event) {
+	//for _, e := range *entities {
+	//	if e.HasComponent(component.VelocityType) {
+	//		v := event.Object.GetComponent(component.VelocityType).(*component.Velocity)
+	//		v.X = 0
+	//		v.Y = 0
+	//	}
+	//}
+	log.Print("GAME OVER")
 }
