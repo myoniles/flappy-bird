@@ -76,6 +76,7 @@ func (w *World) cleanup() {
 		_, ok := w.deleted[e]
 		return ok
 	})
+	clear(w.deleted)
 }
 
 func (w *World) Emit(event ecs.Event) {
