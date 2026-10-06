@@ -90,7 +90,7 @@ func hasPoisoned(e, other *ecs.Entity) bool {
 	return false
 }
 
-func HandleBlockBack(entities *[]*ecs.Entity, event ecs.Event) {
+func HandleBlockBack(w ecs.World, event ecs.Event) {
 	if event.Object.HasComponent(component.VelocityType) {
 		v1 := event.Object.GetComponent(component.VelocityType).(*component.Velocity)
 		v1.X = 0
@@ -103,10 +103,9 @@ func HandleBlockBack(entities *[]*ecs.Entity, event ecs.Event) {
 		v1.X = 0
 		v1.Y = 0
 	}
-
 }
 
-func HandleGameLoss(entities *[]*ecs.Entity, event ecs.Event) {
+func HandleGameLoss(w ecs.World, event ecs.Event) {
 	//for _, e := range *entities {
 	//	if e.HasComponent(component.VelocityType) {
 	//		v := event.Object.GetComponent(component.VelocityType).(*component.Velocity)

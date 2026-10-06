@@ -30,7 +30,7 @@ func (s SpawnSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 	}
 }
 
-func HandleSpawn(entities *[]*ecs.Entity, e ecs.Event) {
+func HandleSpawn(w ecs.World, e ecs.Event) {
 	sp := e.Subject.GetComponent(component.SpawnerType).(*component.Spawner)
-	*entities = append(*entities, sp.Factory()...)
+	w.AddEntity(sp.Factory()...)
 }

@@ -1,8 +1,6 @@
 package system
 
 import (
-	"slices"
-
 	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
@@ -14,10 +12,8 @@ func init() {
 	Handlers[DestroyEvent] = append(Handlers[DestroyEvent], HandleOutOfBounds)
 }
 
-func HandleOutOfBounds(entities *[]*ecs.Entity, e ecs.Event) {
-	*entities = slices.DeleteFunc(*entities, func(x *ecs.Entity) bool {
-		return x == e.Subject
-	})
+func HandleOutOfBounds(w ecs.World, e ecs.Event) {
+	w.RemoveEntity(e.Subject)
 }
 
 // TODO move to config

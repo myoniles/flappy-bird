@@ -9,8 +9,8 @@ const FlapEvent ecs.EventType = "FLAPPINGTHEBIRD"
 
 func init() { Handlers[FlapEvent] = append(Handlers[FlapEvent], HandleFlap) }
 
-func HandleFlap(entities *[]*ecs.Entity, e ecs.Event) {
-	for _, ent := range *entities {
+func HandleFlap(w ecs.World, e ecs.Event) {
+	for _, ent := range w.Entities() {
 		if !ent.HasComponent(component.FlapperType) || !ent.HasComponent(component.VelocityType) {
 			continue
 		}

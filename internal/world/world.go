@@ -1,6 +1,8 @@
 package world
 
 import (
+	"slices"
+
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/input"
 	"github.com/myoniles/vulcan/internal/world/component"
@@ -12,12 +14,16 @@ type World struct {
 	entities []*ecs.Entity
 	systems  []ecs.System
 	queue    *ecs.EventQueue
+
+	deleted  map[*ecs.Entity]struct{}
 	gameLost bool
 }
 
 func NewWorld() World {
 	w := World{gameLost: false}
 	queue := ecs.EventQueue{}
+	w.deleted = make(map[*ecs.Entity]struct{})
+
 	w.queue = &queue
 	w.entities = append(w.entities, entity.NewBird())
 	w.entities = append(w.entities, entity.NewPipePair()...)
@@ -45,10 +51,35 @@ func (w *World) Update(in input.State) {
 		s.Update(w.entities, w.queue)
 	}
 	w.processEvents()
+	w.cleanup()
 }
 
 func (w World) Entities() []*ecs.Entity {
 	return w.entities
+}
+
+func (w *World) AddEntity(e ...*ecs.Entity) {
+	w.entities = append(w.entities, e...)
+}
+
+// RemoveEntity is a lazy delete so that all events / interactions can be done before removal
+func (w *World) RemoveEntity(e *ecs.Entity) {
+	w.deleted[e] = struct{}{}
+}
+
+func (w *World) cleanup() {
+	if len(w.deleted) == 0 {
+		return
+	}
+
+	w.entities = slices.DeleteFunc( w.entities, func(e *ecs.Entity) bool {
+		_, ok := w.deleted[e]
+		return ok
+	})
+}
+
+func (w *World) Emit(event ecs.Event) {
+	w.queue.Enqueue(event)
 }
 
 func (w World) Lost() bool {
@@ -67,7 +98,7 @@ func (w *World) processEvents() {
 		}
 
 		for _, handler := range system.Handlers[event.Verb] {
-			handler(&w.entities, event)
+			handler(w, event)
 		}
 	}
 }
