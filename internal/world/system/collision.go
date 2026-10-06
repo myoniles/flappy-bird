@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	Handlers[CollisionEvent] = append(Handlers[CollisionEvent], HandleBlockBack)
+	//Handlers[CollisionEvent] = append(Handlers[CollisionEvent], HandleBlockBack)
 	Handlers[GameLossEvent] = append(Handlers[GameLossEvent], HandleGameLoss)
 }
 

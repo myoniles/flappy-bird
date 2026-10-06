@@ -22,6 +22,8 @@ func NewBird() *ecs.Entity {
 	e.AddComponent(component.Gravity{Accel: 12})
 	e.AddComponent(&component.Flapper{Impulse: 6})
 	e.AddComponent(&component.Poisonee{})
+	s := component.NewScorer()
+	e.AddComponent(s)
 	return e
 }
 

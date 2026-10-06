@@ -1,14 +1,22 @@
 package render
 
 import (
+	"bytes"
+	"log"
+
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world"
 	"github.com/myoniles/vulcan/internal/world/component"
+	"golang.org/x/image/font/gofont/goregular"
 )
+
+var textFaceSource *text.GoTextFaceSource = nil
 
 func RenderWorld(w world.World, screen *ebiten.Image) {
 	for _, e := range w.Entities() {
+		renderText(e, screen)
 		renderSprite(e, screen)
 	}
 }
@@ -31,4 +39,37 @@ func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
 	op.Filter = ebiten.FilterLinear
 
 	screen.DrawImage(spriteImage, op)
+}
+
+func renderText(e *ecs.Entity, screen *ebiten.Image) {
+	if !e.HasComponent(component.TextType) || !e.HasComponent(component.TransformType) {
+		return
+	}
+
+	if textFaceSource == nil {
+		loadFont()
+	}
+
+	textComponent := e.GetComponent(component.TextType).(*component.Text)
+	transform := e.GetComponent(component.TransformType).(*component.Transform)
+
+	face := &text.GoTextFace{
+		Size:   float64(textComponent.FontSize),
+		Source: textFaceSource,
+	}
+
+	op := &text.DrawOptions{}
+	op.GeoM.Translate(float64(transform.X), float64(transform.Y))
+	op.ColorScale.SetWithColor(textComponent.Color)
+	op.LineSpacing = float64(textComponent.FontSize)
+	text.Draw(screen, textComponent.Text, face, op)
+
+}
+
+func loadFont() {
+	src, err := text.NewGoTextFaceSource(bytes.NewReader(goregular.TTF))
+	if err != nil {
+		log.Fatal(err)
+	}
+	textFaceSource = src
 }

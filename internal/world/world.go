@@ -1,6 +1,7 @@
 package world
 
 import (
+	"log"
 	"slices"
 
 	"github.com/myoniles/vulcan/internal/ecs"
@@ -25,10 +26,12 @@ func NewWorld() World {
 	w.deleted = make(map[*ecs.Entity]struct{})
 
 	w.queue = &queue
-	w.entities = append(w.entities, entity.NewBird())
+	bird := entity.NewBird()
+	w.entities = append(w.entities, bird)
 	w.entities = append(w.entities, entity.NewPipePair()...)
 	w.entities = append(w.entities, entity.NewCeiling())
 	w.entities = append(w.entities, entity.NewFloor())
+	w.entities = append(w.entities, entity.NewScoreboard(bird.GetComponent(component.ScorerType).(*component.Scorer)))
 
 	w.systems = append(w.systems, system.GravitySystem{})
 	w.systems = append(w.systems, system.MovementSystem{})
@@ -52,6 +55,13 @@ func (w *World) Update(in input.State) {
 	}
 	w.processEvents()
 	w.cleanup()
+
+	var s string
+	for _, e := range w.Entities() {
+		s += e.Id()
+		s += " "
+	}
+	log.Print(s)
 }
 
 func (w World) Entities() []*ecs.Entity {

@@ -25,3 +25,16 @@ func (q *EventQueue) Dequeue() (Event, bool) {
 	q.events = q.events[1:]
 	return event, true
 }
+
+func (e Event) GetEntitiesWithComponent(c ComponentType) ([]*Entity) {
+	var comps []*Entity
+	if e.Subject.HasComponent(c) {
+		comps = append(comps, e.Subject)
+	}
+
+	if e.Object.HasComponent(c) {
+		comps = append(comps, e.Object)
+	}
+
+	return comps
+}
