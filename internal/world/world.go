@@ -56,12 +56,12 @@ func (w *World) Update(in input.State) {
 	w.processEvents()
 	w.cleanup()
 
-	var s string
-	for _, e := range w.Entities() {
-		s += e.Id()
-		s += " "
-	}
-	log.Print(s)
+	//var s string
+	//for _, e := range w.Entities() {
+	//	s += e.Id()
+	//	s += " "
+	//}
+	//log.Print(s)
 }
 
 func (w World) Entities() []*ecs.Entity {
@@ -113,6 +113,14 @@ func (w *World) processEvents() {
 		if !ok {
 			break
 		}
+		log.Printf("Processing Event: %p. Subject: %p, Object: %s, verb: 5s", &event.Subject, &event.Object, event.Verb)
+		if event.Subject != nil {
+			log.Printf("Subject (%s): %p", event.Subject.Id(), &event.Subject)
+		}
+		if event.Object != nil {
+			log.Printf("Object (%s): %p", event.Object.Id(), &event.Object)
+		}
+
 
 		if event.Verb == system.GameLossEvent {
 			w.gameLost = true

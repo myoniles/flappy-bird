@@ -75,6 +75,7 @@ func NewPipePair() []*ecs.Entity {
 	inv := ecs.NewEntity(ScorePrefix)
 	inv.AddComponent(&component.Collider{Width: PipeWidth, Height: GapHeight, Layer: component.LayerObstacle})
 	inv.AddComponent(&component.Transform{X: xIndex, Y: offset + GapHeight/2})
+	inv.AddComponent(&component.Consumable{})
 	inv.AddComponent(v)
 	img := pipeBody(GapHeight, true)
 	inv.AddComponent(component.NewStaticSprite(&img))
