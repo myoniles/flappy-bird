@@ -68,6 +68,16 @@ func (w World) Entities() []*ecs.Entity {
 	return w.entities
 }
 
+func (w World) Query(c ecs.ComponentType) []*ecs.Entity {
+	result := make([]*ecs.Entity, 0, len(w.entities))
+	for _, v := range w.entities {
+		if v.HasComponent(c) {
+			result = append(result, v)
+		}
+	}
+	return result
+}
+
 func (w *World) AddEntity(e ...*ecs.Entity) {
 	w.entities = append(w.entities, e...)
 }
@@ -82,7 +92,7 @@ func (w *World) cleanup() {
 		return
 	}
 
-	w.entities = slices.DeleteFunc( w.entities, func(e *ecs.Entity) bool {
+	w.entities = slices.DeleteFunc(w.entities, func(e *ecs.Entity) bool {
 		_, ok := w.deleted[e]
 		return ok
 	})
