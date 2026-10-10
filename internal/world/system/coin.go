@@ -11,6 +11,8 @@ func init() {
 	Handlers[CollisionEvent] = append(Handlers[CollisionEvent], HandleCoinScored)
 }
 
+const ScoreUpEvent ecs.EventType = "CoinScored"
+
 func HandleCoinScored(w ecs.World, e ecs.Event) {
 	if e.Verb != CollisionEvent {
 		return
@@ -43,6 +45,9 @@ func HandleCoinScored(w ecs.World, e ecs.Event) {
 	scoreComp := scorer.GetComponent(component.ScorerType).(*component.Scorer)
 	scoreComp.Increment()
 	w.RemoveEntity(coin)
-	log.Print("Coin removed")
 	log.Printf("%s captured %s. %s's score now at %d", scorer.Id(), coin.Id(), scoreComp.Type(), scoreComp.Score())
+	w.Emit(ecs.Event{
+		Verb:    ScoreUpEvent,
+		Subject: scorer,
+	})
 }

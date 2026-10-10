@@ -26,6 +26,16 @@ func (q *EventQueue) Dequeue() (Event, bool) {
 	return event, true
 }
 
+func (q EventQueue) Query(t EventType) *EventQueue {
+	newq := EventQueue{}
+	for _, e := range q.events {
+		if e.Verb == t {
+			newq.Enqueue(e)
+		}
+	}
+	return &newq
+}
+
 func (e Event) GetEntitiesWithComponent(c ComponentType) ([]*Entity) {
 	var comps []*Entity
 	if e.Subject.HasComponent(c) {

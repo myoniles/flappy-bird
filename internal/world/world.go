@@ -31,7 +31,7 @@ func NewWorld() World {
 	w.entities = append(w.entities, entity.NewPipePair()...)
 	w.entities = append(w.entities, entity.NewCeiling())
 	w.entities = append(w.entities, entity.NewFloor())
-	w.entities = append(w.entities, entity.NewScoreboard(bird.GetComponent(component.ScorerType).(*component.Scorer)))
+	w.entities = append(w.entities, entity.NewScoreboard())
 
 	w.systems = append(w.systems, system.GravitySystem{})
 	w.systems = append(w.systems, system.MovementSystem{})

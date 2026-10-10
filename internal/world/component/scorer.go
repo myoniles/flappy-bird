@@ -3,10 +3,17 @@ package component
 import "github.com/myoniles/vulcan/internal/ecs"
 
 const ScorerType ecs.ComponentType = "ScorerType"
+const ScorerBoardType ecs.ComponentType = "ScoreBoardType"
 
 type Scorer struct {
 	score  int
 	isLost bool
+}
+
+type Scoreboard struct {}
+
+func (s *Scoreboard) Type() ecs.ComponentType {
+	return ScorerBoardType
 }
 
 func NewScorer() *Scorer {
