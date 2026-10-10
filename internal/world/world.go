@@ -55,13 +55,6 @@ func (w *World) Update(in input.State) {
 	}
 	w.processEvents()
 	w.cleanup()
-
-	//var s string
-	//for _, e := range w.Entities() {
-	//	s += e.Id()
-	//	s += " "
-	//}
-	//log.Print(s)
 }
 
 func (w World) Entities() []*ecs.Entity {
