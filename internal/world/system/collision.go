@@ -17,7 +17,8 @@ type CollisionSystem struct{}
 const CollisionEvent ecs.EventType = "CollisionEvent"
 const GameLossEvent ecs.EventType = "GameOver"
 
-func (c CollisionSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
+func (c CollisionSystem) Update(w ecs.World) {
+	entities := w.Entities()
 	for i, e := range entities {
 		if !isCollidable(e) {
 			continue
@@ -38,10 +39,10 @@ func (c CollisionSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 					Object:  other,
 					Verb:    CollisionEvent,
 				}
-				q.Enqueue(event)
+				w.Emit(event)
 
 				if hasPoisoned(e, other) {
-					q.Enqueue(ecs.Event{Verb: GameLossEvent})
+					w.Emit(ecs.Event{Verb: GameLossEvent})
 				}
 			}
 		}

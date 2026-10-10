@@ -51,7 +51,7 @@ func (w *World) Update(in input.State) {
 	}
 
 	for _, s := range w.systems {
-		s.Update(w.entities, w.queue)
+		s.Update(w)
 	}
 	w.processEvents()
 	w.cleanup()

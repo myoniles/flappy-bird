@@ -6,7 +6,7 @@ import (
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
-var DestroyEvent ecs.EventType = "Destroy"
+const DestroyEvent ecs.EventType = "Destroy"
 
 func init() {
 	Handlers[DestroyEvent] = append(Handlers[DestroyEvent], HandleOutOfBounds)
@@ -21,15 +21,13 @@ const OOBMod = 250
 
 type CleanupSystem struct{}
 
-func (c CleanupSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
+func (c CleanupSystem) Update(w ecs.World) {
+	entities := w.Query(component.TransformType)
 	for _, e := range entities {
-		if !e.HasComponent(component.TransformType) {
-			continue
-		}
 		t := e.GetComponent(component.TransformType).(*component.Transform)
 		if isOutOfBounds(t.X, t.Y) {
 			event := ecs.Event{Subject: e, Verb: DestroyEvent}
-			q.Enqueue(event)
+			w.Emit(event)
 		}
 	}
 }

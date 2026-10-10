@@ -13,8 +13,8 @@ func init() {
 
 type SpawnSystem struct{}
 
-func (s SpawnSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
-	for _, e := range entities {
+func (s SpawnSystem) Update(w ecs.World) {
+	for _, e := range w.Entities() {
 		if !e.HasComponent(component.SpawnerType) {
 			continue
 		}
@@ -22,7 +22,7 @@ func (s SpawnSystem) Update(entities []*ecs.Entity, q *ecs.EventQueue) {
 		sp.Elapsed++
 		if sp.Elapsed >= sp.Interval {
 			sp.Elapsed = 0
-			q.Enqueue(ecs.Event{
+			w.Emit(ecs.Event{
 				Subject: e,
 				Verb:    SpawnEvent,
 			})

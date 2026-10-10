@@ -7,8 +7,8 @@ import (
 
 type MovementSystem struct{}
 
-func (g MovementSystem) Update(entries []*ecs.Entity, q *ecs.EventQueue) {
-	for _, e := range entries {
+func (g MovementSystem) Update(w ecs.World) {
+	for _, e := range w.Entities() {
 		if !e.HasComponent(component.TransformType) || !e.HasComponent(component.VelocityType) {
 			continue
 		}
