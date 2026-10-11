@@ -10,13 +10,11 @@ import (
 )
 
 type Game struct {
-	Mode  GameMode
 	World world.World
 }
 
 func NewGame() *Game {
 	g := Game{}
-	g.Mode = GameStart
 	g.World = world.NewWorld()
 	return &g
 }
