@@ -14,6 +14,9 @@ func init() {
 const ScoreUpEvent ecs.EventType = "CoinScored"
 
 func HandleCoinScored(w ecs.World, e ecs.Event) {
+	if w.State() != ecs.PlayState {
+		return
+	}
 	if e.Verb != CollisionEvent {
 		return
 	}

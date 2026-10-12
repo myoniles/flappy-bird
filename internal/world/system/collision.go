@@ -18,6 +18,9 @@ const CollisionEvent ecs.EventType = "CollisionEvent"
 const GameLossEvent ecs.EventType = "GameOver"
 
 func (c CollisionSystem) Update(w ecs.World) {
+	if w.State() != ecs.PlayState {
+		return
+	}
 	entities := w.Entities()
 	for i, e := range entities {
 		if !isCollidable(e) {
@@ -58,7 +61,7 @@ func isColliding(e1 *ecs.Entity, e2 *ecs.Entity) bool {
 	b2 := e2.GetComponent(component.ColliderType).(*component.Collider)
 
 	// Check if they *can* even collide based on their layers
-	if b1.Mask & b2.Layer == 0 && b2.Mask & b1.Layer == 0 {
+	if b1.Mask&b2.Layer == 0 && b2.Mask&b1.Layer == 0 {
 		return false
 	}
 

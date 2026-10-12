@@ -30,6 +30,15 @@ func (c CleanupSystem) Update(w ecs.World) {
 			w.Emit(event)
 		}
 	}
+
+	entities = w.Query(component.StateScopedType)
+	for _, e := range entities {
+		scope := e.GetComponent(component.StateScopedType).(*component.StateScoped)
+		if w.State() != scope.Active {
+			event := ecs.Event{Subject: e, Verb: DestroyEvent}
+			w.Emit(event)
+		}
+	}
 }
 
 func isOutOfBounds(x, y int) bool {

@@ -6,8 +6,6 @@ import (
 
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/input"
-	"github.com/myoniles/vulcan/internal/world/component"
-	"github.com/myoniles/vulcan/internal/world/entity"
 	"github.com/myoniles/vulcan/internal/world/system"
 )
 
@@ -15,33 +13,24 @@ type World struct {
 	entities []*ecs.Entity
 	systems  []ecs.System
 	queue    *ecs.EventQueue
+	state    ecs.GameState
+	nextState    ecs.GameState
 
 	deleted  map[*ecs.Entity]struct{}
 	gameLost bool
 }
 
 func NewWorld() World {
-	w := World{gameLost: false}
+	w := World{gameLost: false, nextState: ecs.PlayState}
 	queue := ecs.EventQueue{}
 	w.deleted = make(map[*ecs.Entity]struct{})
-
-	w.queue = &queue
-	bird := entity.NewBird()
-	w.entities = append(w.entities, bird)
-	w.entities = append(w.entities, entity.NewPipePair()...)
-	w.entities = append(w.entities, entity.NewCeiling())
-	w.entities = append(w.entities, entity.NewFloor())
-	w.entities = append(w.entities, entity.NewScoreboard())
 
 	w.systems = append(w.systems, system.GravitySystem{})
 	w.systems = append(w.systems, system.MovementSystem{})
 	w.systems = append(w.systems, system.CollisionSystem{})
 	w.systems = append(w.systems, system.CleanupSystem{})
 	w.systems = append(w.systems, system.SpawnSystem{})
-
-	pipeSpawner := ecs.NewEntity("pipe-spawner")
-	pipeSpawner.AddComponent(&component.Spawner{Interval: 90, Factory: entity.NewPipePair})
-	w.entities = append(w.entities, pipeSpawner)
+	w.queue = &queue
 	return w
 }
 
@@ -55,6 +44,23 @@ func (w *World) Update(in input.State) {
 	}
 	w.processEvents()
 	w.cleanup()
+	w.transition()
+}
+
+func (w *World) transition() {
+	if w.NextState() == w.State() {
+		return
+	}
+	currTransitioner := system.Transitioners[w.State()]
+	for _, t := range currTransitioner {
+		t.OnExit(w)
+	}
+
+	nextTransitioner := system.Transitioners[w.NextState()]
+	for _, t := range nextTransitioner {
+		t.OnEnter(w)
+	}
+	w.state = w.nextState
 }
 
 func (w World) Entities() []*ecs.Entity {
@@ -98,6 +104,18 @@ func (w *World) Emit(event ecs.Event) {
 
 func (w World) Lost() bool {
 	return w.gameLost
+}
+
+func (w World) State() ecs.GameState {
+	return w.state
+}
+
+func (w World) NextState() ecs.GameState {
+	return w.nextState
+}
+
+func (w World) SetNextState(s ecs.GameState) {
+	w.nextState = s
 }
 
 func (w *World) processEvents() {
