@@ -18,7 +18,7 @@ func (t *TitleTransition) OnEnter(w ecs.World) {
 	titleText := ecs.NewEntity("Title")
 	// TODO config
 	titleText.AddComponent(&component.Text{
-		Text:     "Overcomplicated Angry Birds",
+		Text:     "Overcomplicated\nFlappy Bird",
 		FontSize: 67,
 		Color:    color.RGBA{R: 255, G: 255, B: 0, A: 255},
 	})
@@ -33,7 +33,7 @@ func (t *TitleTransition) OnEnter(w ecs.World) {
 		FontSize: 40,
 		Color:    color.RGBA{R: 255, G: 255, B: 0, A: 255},
 	})
-	help.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight - 200})
+	help.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight - 100})
 	help.AddComponent(&component.StateScoped{Active: ecs.Title})
 	w.AddEntity(help)
 }

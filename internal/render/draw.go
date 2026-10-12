@@ -59,7 +59,7 @@ func renderText(e *ecs.Entity, screen *ebiten.Image) {
 	}
 
 	op := &text.DrawOptions{}
-	op.GeoM.Translate(float64(transform.X), float64(transform.Y))
+	op.GeoM.Translate(float64(transform.X)/2.0, float64(transform.Y)/2.0)
 	op.ColorScale.SetWithColor(textComponent.Color)
 	op.LineSpacing = float64(textComponent.FontSize)
 	text.Draw(screen, textComponent.Text, face, op)

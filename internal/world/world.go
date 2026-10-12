@@ -21,7 +21,7 @@ type World struct {
 }
 
 func NewWorld() World {
-	w := World{gameLost: false, nextState: ecs.PlayState}
+	w := World{gameLost: false, nextState: ecs.Title}
 	queue := ecs.EventQueue{}
 	w.deleted = make(map[*ecs.Entity]struct{})
 
@@ -61,6 +61,7 @@ func (w *World) transition() {
 		t.OnEnter(w)
 	}
 	w.state = w.nextState
+	log.Printf("Curr %s, Next %s", w.State(), w.NextState())
 }
 
 func (w World) Entities() []*ecs.Entity {
@@ -114,7 +115,7 @@ func (w World) NextState() ecs.GameState {
 	return w.nextState
 }
 
-func (w World) SetNextState(s ecs.GameState) {
+func (w *World) SetNextState(s ecs.GameState) {
 	w.nextState = s
 }
 
