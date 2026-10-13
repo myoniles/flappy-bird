@@ -13,13 +13,7 @@ const FlapEvent ecs.EventType = "FLAPPINGTHEBIRD"
 
 type FlapSystem struct{}
 
-func init() {
-	Handlers[FlapEvent] = append(Handlers[FlapEvent], HandleFlap)
-	Handlers[FlapEvent] = append(Handlers[FlapEvent], HandleTitleFlap)
-	Handlers[FlapEvent] = append(Handlers[FlapEvent], HandleEndFlap)
-}
-
-func HandleFlap(w ecs.World, e ecs.Event) {
+func HandleFlap(w *ecs.World, e ecs.Event) {
 	if w.State() != state.Play {
 		return
 	}
@@ -33,21 +27,21 @@ func HandleFlap(w ecs.World, e ecs.Event) {
 	}
 }
 
-func HandleTitleFlap(w ecs.World, e ecs.Event) {
+func HandleTitleFlap(w *ecs.World, e ecs.Event) {
 	if w.State() != state.Title {
 		return
 	}
 	w.SetNextState(state.Play)
 }
 
-func (f FlapSystem) Update(w ecs.World) {
+func (f FlapSystem) Update(w *ecs.World) {
 	if w.Resource(input.StateType).(*input.State).JustPressed(input.Flap) {
 		log.Print("Flapping")
 		w.Emit(ecs.Event{Verb: FlapEvent})
 	}
 }
 
-func HandleEndFlap(w ecs.World, e ecs.Event) {
+func HandleEndFlap(w *ecs.World, e ecs.Event) {
 	log.Print("Handling Restart")
 	if w.State() != state.End {
 		return

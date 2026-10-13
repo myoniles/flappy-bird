@@ -8,13 +8,9 @@ import (
 	"github.com/myoniles/vulcan/internal/world/state"
 )
 
-func init() {
-	Handlers[CollisionEvent] = append(Handlers[CollisionEvent], HandleCoinScored)
-}
-
 const ScoreUpEvent ecs.EventType = "CoinScored"
 
-func HandleCoinScored(w ecs.World, e ecs.Event) {
+func HandleCoinScored(w *ecs.World, e ecs.Event) {
 	if w.State() != state.Play {
 		return
 	}

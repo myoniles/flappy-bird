@@ -8,7 +8,7 @@ import (
 
 type MovementSystem struct{}
 
-func (g MovementSystem) Update(w ecs.World) {
+func (g MovementSystem) Update(w *ecs.World) {
 	if w.State() != state.Play {
 		return
 	}

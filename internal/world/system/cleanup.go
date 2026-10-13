@@ -8,17 +8,13 @@ import (
 
 const DestroyEvent ecs.EventType = "Destroy"
 
-func init() {
-	Handlers[DestroyEvent] = append(Handlers[DestroyEvent], HandleOutOfBounds)
-}
-
-func HandleOutOfBounds(w ecs.World, e ecs.Event) {
+func HandleOutOfBounds(w *ecs.World, e ecs.Event) {
 	w.RemoveEntity(e.Subject)
 }
 
 type CleanupSystem struct{}
 
-func (c CleanupSystem) Update(w ecs.World) {
+func (c CleanupSystem) Update(w *ecs.World) {
 	entities := w.Query(component.TransformType)
 	for _, e := range entities {
 		t := e.GetComponent(component.TransformType).(*component.Transform)

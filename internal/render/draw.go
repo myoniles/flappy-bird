@@ -7,14 +7,13 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/myoniles/vulcan/internal/ecs"
-	"github.com/myoniles/vulcan/internal/world"
 	"github.com/myoniles/vulcan/internal/world/component"
 	"golang.org/x/image/font/gofont/goregular"
 )
 
 var textFaceSource *text.GoTextFaceSource = nil
 
-func RenderWorld(w world.World, screen *ebiten.Image) {
+func RenderWorld(w ecs.World, screen *ebiten.Image) {
 	for _, e := range w.Entities() {
 		renderText(e, screen)
 		renderSprite(e, screen)

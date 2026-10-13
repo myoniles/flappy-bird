@@ -7,12 +7,9 @@ import (
 	"github.com/myoniles/vulcan/internal/world/state"
 )
 
-func init() { Transitioners[state.Title] = append(Transitioners[state.Title], &TitleTransition{}) }
+type TitleTransition struct{}
 
-type TitleTransition struct {
-}
-
-func (t *TitleTransition) OnEnter(w ecs.World) {
+func (t *TitleTransition) OnEnter(w *ecs.World) {
 	windowConf := config.GetWindowConfig()
 	titleText := ecs.NewEntity("Title")
 	textConf := config.TitleTextConfig()
@@ -37,5 +34,5 @@ func (t *TitleTransition) OnEnter(w ecs.World) {
 	w.AddEntity(help)
 }
 
-func (t *TitleTransition) OnExit(w ecs.World) {
+func (t *TitleTransition) OnExit(w *ecs.World) {
 }

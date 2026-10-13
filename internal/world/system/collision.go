@@ -17,7 +17,7 @@ type CollisionSystem struct{}
 const CollisionEvent ecs.EventType = "CollisionEvent"
 const GameLossEvent ecs.EventType = "GameOver"
 
-func (c CollisionSystem) Update(w ecs.World) {
+func (c CollisionSystem) Update(w *ecs.World) {
 	if w.State() != state.Play {
 		return
 	}
@@ -94,7 +94,7 @@ func hasPoisoned(e, other *ecs.Entity) bool {
 	return false
 }
 
-func HandleBlockBack(w ecs.World, event ecs.Event) {
+func HandleBlockBack(w *ecs.World, event ecs.Event) {
 	if event.Object.HasComponent(component.VelocityType) {
 		v1 := event.Object.GetComponent(component.VelocityType).(*component.Velocity)
 		v1.X = 0

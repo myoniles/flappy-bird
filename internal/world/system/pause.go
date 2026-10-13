@@ -11,17 +11,12 @@ import (
 	"github.com/myoniles/vulcan/internal/world/state"
 )
 
-func init() {
-	Transitioners[state.Pause] = append(Transitioners[state.Pause], &PauseTransition{})
-	Handlers[PauseToggleEvent] = append(Handlers[PauseToggleEvent], HandlePauseToggle)
-}
-
 const PauseToggleEvent ecs.EventType = "PauseToggle"
 
 type PauseTransition struct {
 }
 
-func (t *PauseTransition) OnEnter(w ecs.World) {
+func (t *PauseTransition) OnEnter(w *ecs.World) {
 	windowConf := config.GetWindowConfig()
 
 	backgroundMask := ecs.NewEntity("Mask")
@@ -54,10 +49,10 @@ func (t *PauseTransition) OnEnter(w ecs.World) {
 	w.AddEntity(help)
 }
 
-func (t *PauseTransition) OnExit(w ecs.World) {
+func (t *PauseTransition) OnExit(w *ecs.World) {
 }
 
-func (t PauseTransition) Update(w ecs.World) {
+func (t PauseTransition) Update(w *ecs.World) {
 	if w.State() != state.Pause && w.State() != state.Play {
 		return
 	}
@@ -68,7 +63,7 @@ func (t PauseTransition) Update(w ecs.World) {
 	}
 }
 
-func HandlePauseToggle(w ecs.World, e ecs.Event) {
+func HandlePauseToggle(w *ecs.World, e ecs.Event) {
 	if w.State() == state.Play {
 		w.SetNextState(state.Pause)
 	} else if w.State() == state.Pause {

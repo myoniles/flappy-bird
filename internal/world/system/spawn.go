@@ -8,13 +8,9 @@ import (
 
 const SpawnEvent ecs.EventType = "SpawnEvent"
 
-func init() {
-	Handlers[SpawnEvent] = append(Handlers[SpawnEvent], HandleSpawn)
-}
-
 type SpawnSystem struct{}
 
-func (s SpawnSystem) Update(w ecs.World) {
+func (s SpawnSystem) Update(w *ecs.World) {
 	if w.State() != state.Play {
 		return
 	}
@@ -34,7 +30,7 @@ func (s SpawnSystem) Update(w ecs.World) {
 	}
 }
 
-func HandleSpawn(w ecs.World, e ecs.Event) {
+func HandleSpawn(w *ecs.World, e ecs.Event) {
 	sp := e.Subject.GetComponent(component.SpawnerType).(*component.Spawner)
 	w.AddEntity(sp.Factory()...)
 }

@@ -10,15 +10,10 @@ import (
 	"github.com/myoniles/vulcan/internal/world/state"
 )
 
-func init() {
-	Transitioners[state.End] = append(Transitioners[state.End], &EndTransition{})
-	Handlers[GameLossEvent] = append(Handlers[GameLossEvent], HandleGameLossEvent)
-}
-
 type EndTransition struct {
 }
 
-func (t *EndTransition) OnEnter(w ecs.World) {
+func (t *EndTransition) OnEnter(w *ecs.World) {
 	windowConf := config.GetWindowConfig()
 
 	backgroundMask := ecs.NewEntity("Mask")
@@ -52,12 +47,12 @@ func (t *EndTransition) OnEnter(w ecs.World) {
 	w.AddEntity(help)
 }
 
-func (t *EndTransition) OnExit(w ecs.World) {
+func (t *EndTransition) OnExit(w *ecs.World) {
 	for _, e := range w.Entities() {
 		w.RemoveEntity(e)
 	}
 }
 
-func HandleGameLossEvent(w ecs.World, e ecs.Event) {
+func HandleGameLossEvent(w *ecs.World, e ecs.Event) {
 	w.SetNextState(state.End)
 }

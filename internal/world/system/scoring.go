@@ -8,12 +8,7 @@ import (
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
-
-func init() {
-	Handlers[ScoreUpEvent] = append(Handlers[ScoreUpEvent], HandleUpdateScoreboard)
-}
-
-func HandleUpdateScoreboard(w ecs.World, event ecs.Event) {
+func HandleUpdateScoreboard(w *ecs.World, event ecs.Event) {
 	scoreBoards := w.Query(component.ScorerBoardType)
 	scorer := event.Subject
 	scoreComp := scorer.GetComponent(component.ScorerType).(*component.Scorer)

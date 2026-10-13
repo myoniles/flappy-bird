@@ -8,7 +8,7 @@ import (
 
 type GravitySystem struct{}
 
-func (g GravitySystem) Update(w ecs.World) {
+func (g GravitySystem) Update(w *ecs.World) {
 	if w.State() != state.Play {
 		return
 	}

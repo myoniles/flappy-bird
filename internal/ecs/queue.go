@@ -48,3 +48,6 @@ func (e Event) GetEntitiesWithComponent(c ComponentType) ([]*Entity) {
 
 	return comps
 }
+
+
+type EventHandler func(w *World, e Event)

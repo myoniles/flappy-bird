@@ -7,15 +7,16 @@ import (
 	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/render"
 	"github.com/myoniles/vulcan/internal/world"
+	"github.com/myoniles/vulcan/internal/ecs"
 )
 
 type Game struct {
-	World world.World
+	World ecs.World
 }
 
 func NewGame() *Game {
 	g := Game{}
-	g.World = world.NewWorld()
+	g.World = *world.NewFlappyWorld()
 	return &g
 }
 
