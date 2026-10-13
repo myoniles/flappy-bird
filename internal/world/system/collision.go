@@ -6,11 +6,6 @@ import (
 	"github.com/myoniles/vulcan/internal/world/state"
 )
 
-func init() {
-	//Handlers[CollisionEvent] = append(Handlers[CollisionEvent], HandleBlockBack)
-	//Handlers[GameLossEvent] = append(Handlers[GameLossEvent], HandleGameLoss)
-}
-
 type CollisionSystem struct{}
 
 const CollisionEvent ecs.EventType = "CollisionEvent"

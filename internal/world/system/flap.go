@@ -46,5 +46,6 @@ func HandleEndFlap(w *ecs.World, e ecs.Event) {
 	if w.State() != state.End {
 		return
 	}
+	log.Print("Handling Restart")
 	w.SetNextState(state.Play)
 }

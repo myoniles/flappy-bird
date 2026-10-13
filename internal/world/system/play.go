@@ -8,7 +8,7 @@ import (
 
 type TitleToPlayTransition struct{}
 
-func (t *TitleToPlayTransition) OnEnter(w *ecs.World) {
+func (t *TitleToPlayTransition) Transition(w *ecs.World) {
 	bird := entity.NewBird()
 	w.AddEntity(bird)
 	w.AddEntity(entity.NewPipePair()...)

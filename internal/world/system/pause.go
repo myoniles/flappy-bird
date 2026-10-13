@@ -16,7 +16,7 @@ const PauseToggleEvent ecs.EventType = "PauseToggle"
 type PauseTransition struct {
 }
 
-func (t *PauseTransition) OnEnter(w *ecs.World) {
+func (t *PauseTransition) Transition(w *ecs.World) {
 	windowConf := config.GetWindowConfig()
 
 	backgroundMask := ecs.NewEntity("Mask")
@@ -47,9 +47,6 @@ func (t *PauseTransition) OnEnter(w *ecs.World) {
 	help.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight - 100})
 	help.AddComponent(&component.StateScoped{Active: state.Pause})
 	w.AddEntity(help)
-}
-
-func (t *PauseTransition) OnExit(w *ecs.World) {
 }
 
 func (t PauseTransition) Update(w *ecs.World) {

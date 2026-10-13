@@ -9,7 +9,7 @@ import (
 
 type TitleTransition struct{}
 
-func (t *TitleTransition) OnEnter(w *ecs.World) {
+func (t *TitleTransition) Transition(w *ecs.World) {
 	windowConf := config.GetWindowConfig()
 	titleText := ecs.NewEntity("Title")
 	textConf := config.TitleTextConfig()
@@ -32,7 +32,4 @@ func (t *TitleTransition) OnEnter(w *ecs.World) {
 	help.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight - 100})
 	help.AddComponent(&component.StateScoped{Active: state.Title})
 	w.AddEntity(help)
-}
-
-func (t *TitleTransition) OnExit(w *ecs.World) {
 }

@@ -19,10 +19,12 @@ func NewFlappyWorld() *ecs.World {
 	w.AddSystem(system.SpawnSystem{})
 
 	// Transitioners
-	w.AddTransitioner(state.Title, &system.TitleTransition{})
-	w.AddTransitioner(state.Play, &system.TitleToPlayTransition{})
-	w.AddTransitioner(state.End, &system.EndTransition{})
-	w.AddTransitioner(state.Pause, &system.PauseTransition{})
+	w.AddTransitioner(ecs.AnyState, state.Title, &system.TitleTransition{})
+	w.AddTransitioner(state.Title, state.Play, &system.TitleToPlayTransition{})
+	w.AddTransitioner(state.Play, state.End, &system.EndTransition{})
+	w.AddTransitioner(state.End, state.Play, &system.ResetGameTransition{})
+	w.AddTransitioner(state.Play, state.Pause, &system.PauseTransition{})
+	w.AddTransitioner(state.End, state.Play, &system.TitleToPlayTransition{})
 
 	// Event Handlers
 	w.OnEvent(system.DestroyEvent, system.HandleOutOfBounds)

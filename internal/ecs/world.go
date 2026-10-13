@@ -5,8 +5,6 @@ import (
 	"slices"
 )
 
-type GameState string
-
 type World struct {
 	entities      []*Entity
 	systems       []System
@@ -15,18 +13,17 @@ type World struct {
 	nextState     GameState
 	resources     map[ResourceType]ResourceTyper
 	handlers      map[EventType][]EventHandler
-	transitioners map[GameState][]Transitioner
+	transitioners map[transition][]Transitioner
 
 	deleted map[*Entity]struct{}
 }
 
 func NewWord(initial GameState) *World {
 	w := World{nextState: initial}
-	// TODO
 	w.deleted = make(map[*Entity]struct{})
 	w.resources = make(map[ResourceType]ResourceTyper)
 	w.handlers = make(map[EventType][]EventHandler)
-	w.transitioners = make(map[GameState][]Transitioner)
+	w.transitioners = make(map[transition][]Transitioner)
 	w.queue = &EventQueue{}
 	return &w
 }
@@ -39,8 +36,9 @@ func (w *World) OnEvent(e EventType, h EventHandler) {
 	w.handlers[e] = append(w.handlers[e], h)
 }
 
-func (w *World) AddTransitioner(s GameState, t Transitioner) {
-	w.transitioners[s] = append(w.transitioners[s], t)
+func (w *World) AddTransitioner(from, to GameState, t Transitioner) {
+	tr := transition{From: from, To: to}
+	w.transitioners[tr] = append(w.transitioners[tr], t)
 }
 
 func (w *World) Update() {
@@ -56,15 +54,18 @@ func (w *World) transition() {
 	if w.NextState() == w.State() {
 		return
 	}
-	currTransitioner := w.transitioners[w.State()]
+	tr := transition{
+		From: w.State(),
+		To:   w.NextState(),
+	}
+	currTransitioner := w.transitioners[tr]
+	anyToTransitioners := w.transitioners[transition{From: AnyState, To: w.NextState()}]
+
+	currTransitioner = append(currTransitioner, anyToTransitioners...)
 	for _, t := range currTransitioner {
-		t.OnExit(w)
+		t.Transition(w)
 	}
 
-	nextTransitioner := w.transitioners[w.NextState()]
-	for _, t := range nextTransitioner {
-		t.OnEnter(w)
-	}
 	w.state = w.nextState
 	log.Printf("Curr %s, Next %s", w.State(), w.NextState())
 }

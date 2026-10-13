@@ -13,7 +13,9 @@ import (
 type EndTransition struct {
 }
 
-func (t *EndTransition) OnEnter(w *ecs.World) {
+type ResetGameTransition struct{}
+
+func (t *EndTransition) Transition(w *ecs.World) {
 	windowConf := config.GetWindowConfig()
 
 	backgroundMask := ecs.NewEntity("Mask")
@@ -46,7 +48,7 @@ func (t *EndTransition) OnEnter(w *ecs.World) {
 	w.AddEntity(help)
 }
 
-func (t *EndTransition) OnExit(w *ecs.World) {
+func (t *ResetGameTransition) Transition(w *ecs.World) {
 	for _, e := range w.Entities() {
 		w.RemoveEntity(e)
 	}
