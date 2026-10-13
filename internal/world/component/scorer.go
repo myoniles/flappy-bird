@@ -10,7 +10,7 @@ type Scorer struct {
 	isLost bool
 }
 
-type Scoreboard struct {}
+type Scoreboard struct{}
 
 func (s *Scoreboard) Type() ecs.ComponentType {
 	return ScorerBoardType

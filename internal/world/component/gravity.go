@@ -11,4 +11,3 @@ type Gravity struct {
 func (g Gravity) Type() ecs.ComponentType {
 	return GravityType
 }
-

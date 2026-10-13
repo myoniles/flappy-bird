@@ -16,16 +16,16 @@ func DefaultTextColor() color.Color {
 	}
 }
 
-func TitleTextConfig() TextConfig{
-	return TextConfig {
+func TitleTextConfig() TextConfig {
+	return TextConfig{
 		FontSize: 67,
-		Color: DefaultTextColor(),
+		Color:    DefaultTextColor(),
 	}
 }
 
-func HelperTextConfig() TextConfig{
-	return TextConfig {
+func HelperTextConfig() TextConfig {
+	return TextConfig{
 		FontSize: 40,
-		Color: DefaultTextColor(),
+		Color:    DefaultTextColor(),
 	}
 }

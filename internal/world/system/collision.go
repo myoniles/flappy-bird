@@ -1,7 +1,6 @@
 package system
 
 import (
-
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
 	"github.com/myoniles/vulcan/internal/world/state"

@@ -6,7 +6,7 @@ import (
 	"github.com/myoniles/vulcan/internal/world/entity"
 )
 
-type TitleToPlayTransition struct {}
+type TitleToPlayTransition struct{}
 
 func (t *TitleToPlayTransition) OnEnter(w *ecs.World) {
 	bird := entity.NewBird()

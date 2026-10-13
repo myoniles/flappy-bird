@@ -34,7 +34,6 @@ func (t *EndTransition) OnEnter(w *ecs.World) {
 	titleText.AddComponent(&component.StateScoped{Active: state.End})
 	w.AddEntity(titleText)
 
-
 	help := ecs.NewEntity("HelpText")
 	textConf = config.HelperTextConfig()
 	help.AddComponent(&component.Text{

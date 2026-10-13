@@ -33,7 +33,7 @@ type halfPipe struct {
 
 func NewPipePair() []*ecs.Entity {
 	windowConf := config.GetWindowConfig()
-	offset := rand.IntN(3 * windowConf.LogicalHeight / 4)
+	offset := rand.IntN(3 * windowConf.LogicalHeight / 4) + 1
 	topImg, bottomImg := bodyPairs(offset)
 
 	bottomHeight := bottomImg.Bounds().Dy()

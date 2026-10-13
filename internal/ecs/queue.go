@@ -4,8 +4,8 @@ type EventType string
 
 type Event struct {
 	Subject *Entity
-	Object *Entity
-	Verb EventType
+	Object  *Entity
+	Verb    EventType
 }
 
 type EventQueue struct {
@@ -36,7 +36,7 @@ func (q EventQueue) Query(t EventType) *EventQueue {
 	return &newq
 }
 
-func (e Event) GetEntitiesWithComponent(c ComponentType) ([]*Entity) {
+func (e Event) GetEntitiesWithComponent(c ComponentType) []*Entity {
 	var comps []*Entity
 	if e.Subject.HasComponent(c) {
 		comps = append(comps, e.Subject)
@@ -48,6 +48,5 @@ func (e Event) GetEntitiesWithComponent(c ComponentType) ([]*Entity) {
 
 	return comps
 }
-
 
 type EventHandler func(w *World, e Event)

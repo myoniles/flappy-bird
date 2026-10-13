@@ -18,7 +18,7 @@ func NewScoreboard() *ecs.Entity {
 	e.AddComponent(&component.Text{
 		Text:     fmt.Sprintf("Score:\n%d", 0),
 		FontSize: 50,
-		Color: color.RGBA{R: 255, G: 255, B: 0, A: 255},
+		Color:    color.RGBA{R: 255, G: 255, B: 0, A: 255},
 	})
 
 	return e

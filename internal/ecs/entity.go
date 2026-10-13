@@ -57,11 +57,11 @@ func generateID(prefix string) string {
 	sb.Grow(len(prefix) + 1)
 	sb.WriteString(prefix)
 	sb.WriteRune('-')
-	
+
 	sb.Grow(suffixLength)
 	for range suffixLength {
-		sb.WriteByte(charset[rand.IntN(len(charset))]) 
+		sb.WriteByte(charset[rand.IntN(len(charset))])
 	}
-	
+
 	return sb.String()
 }

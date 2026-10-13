@@ -10,7 +10,6 @@ func (p Poisoner) Type() ecs.ComponentType {
 	return PoisonerType
 }
 
-
 const PoisoneeType ecs.ComponentType = "Poisonee"
 
 type Poisonee struct{}
