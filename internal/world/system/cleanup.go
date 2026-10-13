@@ -16,9 +16,6 @@ func HandleOutOfBounds(w ecs.World, e ecs.Event) {
 	w.RemoveEntity(e.Subject)
 }
 
-// TODO move to config
-const OOBMod = 250
-
 type CleanupSystem struct{}
 
 func (c CleanupSystem) Update(w ecs.World) {
@@ -45,20 +42,19 @@ func isOutOfBounds(x, y int) bool {
 	windowConf := config.GetWindowConfig()
 	// keep it stupid simple, just go off of an arbitrary position
 	// but in all honesty I want the complexity
-	// TODO MORE COMPLEX FOR NO REASON! USE SPRITE BOUNDING BOX FOR EFFICIENCY!!
-	if x > windowConf.LogicalWidth+OOBMod {
+	if x > windowConf.LogicalWidth+config.OutOfBounds {
 		return true
 	}
 
-	if y > windowConf.LogicalHeight+OOBMod {
+	if y > windowConf.LogicalHeight+config.OutOfBounds {
 		return true
 	}
 
-	if x < -OOBMod {
+	if x < -config.OutOfBounds {
 		return true
 	}
 
-	if y < -OOBMod {
+	if y < -config.OutOfBounds {
 		return true
 	}
 

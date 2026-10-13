@@ -19,8 +19,6 @@ func (g GravitySystem) Update(w ecs.World) {
 		v := e.GetComponent(component.VelocityType).(*component.Velocity)
 		grav := e.GetComponent(component.GravityType).(component.Gravity)
 
-		// Ebiten ticks at a fixed 60FPS
-		// TODO make this configurable
 		v.Y += grav.Accel * (1.0/60.0)
 	}
 }

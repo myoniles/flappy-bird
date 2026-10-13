@@ -3,15 +3,14 @@ package entity
 import (
 	"image"
 	"image/color"
-	"image/draw"
 	"math/rand/v2"
 
+	"github.com/myoniles/vulcan/internal/asset"
 	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
-// TODO move to config
 const (
 	PipePrefix  = "pipe"
 	ScorePrefix = "coin"
@@ -83,18 +82,8 @@ func NewPipePair() []*ecs.Entity {
 
 func bodyPairs(offset int) (image.Image, image.Image) {
 	windowConf := config.GetWindowConfig()
-	topImg := pipeBody(offset)
-	bottomImg := pipeBody(windowConf.LogicalHeight-(offset+GapHeight))
+	green := color.RGBA{0, 255, 0, 255}
+	topImg := asset.NewRect(PipeWidth, offset, green)
+	bottomImg := asset.NewRect(PipeWidth, windowConf.LogicalHeight-(offset+GapHeight), green)
 	return topImg, bottomImg
-}
-
-func pipeBody(height int) image.Image {
-	r := image.Rect(0, 0, PipeWidth, height)
-	rgba := image.NewRGBA(r)
-	var green color.Color
-	green = color.RGBA{0, 255, 0, 255}
-	greenSource := image.NewUniform(green)
-	// This writes to rgba
-	draw.Draw(rgba, r.Bounds(), greenSource, image.Point{}, draw.Src)
-	return rgba
 }

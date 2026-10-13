@@ -31,22 +31,22 @@ func (t *PauseTransition) OnEnter(w ecs.World) {
 	w.AddEntity(backgroundMask)
 
 	titleText := ecs.NewEntity("Pause")
-	// TODO config
+	textConf := config.TitleTextConfig()
 	titleText.AddComponent(&component.Text{
 		Text:     "Pause",
-		FontSize: 67,
-		Color:    color.RGBA{R: 255, G: 255, B: 0, A: 255},
+		FontSize: textConf.FontSize,
+		Color:    textConf.Color,
 	})
 	titleText.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: 200})
 	titleText.AddComponent(&component.StateScoped{Active: ecs.Pause})
 	w.AddEntity(titleText)
 
 	help := ecs.NewEntity("HelpText")
-	// TODO config
+	textConf = config.HelperTextConfig()
 	help.AddComponent(&component.Text{
 		Text:     "Press <esc> to resume",
-		FontSize: 40,
-		Color:    color.RGBA{R: 255, G: 255, B: 0, A: 255},
+		FontSize: textConf.FontSize,
+		Color:    textConf.Color,
 	})
 	help.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight - 100})
 	help.AddComponent(&component.StateScoped{Active: ecs.Pause})

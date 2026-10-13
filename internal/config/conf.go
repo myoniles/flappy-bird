@@ -11,6 +11,8 @@ type WindowConfig struct {
 	LogicalHeight int
 }
 
+const OutOfBounds int = 250
+
 func GetWindowConfig() WindowConfig {
 	viper.Get("window")
 	return WindowConfig{

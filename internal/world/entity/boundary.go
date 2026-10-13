@@ -6,7 +6,6 @@ import (
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
-// TODO move to config
 const (
 	BoundaryPrefix    = "boundary"
 	BoundaryThickness = 5

@@ -28,11 +28,11 @@ func (t *EndTransition) OnEnter(w ecs.World) {
 	w.AddEntity(backgroundMask)
 
 	titleText := ecs.NewEntity("End")
-	// TODO config
+	textConf := config.TitleTextConfig()
 	titleText.AddComponent(&component.Text{
 		Text:     "BOO YOU STINK",
-		FontSize: 67,
-		Color:    color.RGBA{R: 255, G: 255, B: 0, A: 255},
+		FontSize: textConf.FontSize,
+		Color:    textConf.Color,
 	})
 	titleText.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: 200})
 	titleText.AddComponent(&component.StateScoped{Active: ecs.End})
@@ -40,11 +40,11 @@ func (t *EndTransition) OnEnter(w ecs.World) {
 
 
 	help := ecs.NewEntity("HelpText")
-	// TODO config
+	textConf = config.HelperTextConfig()
 	help.AddComponent(&component.Text{
 		Text:     "Press Space to restart",
-		FontSize: 40,
-		Color:    color.RGBA{R: 255, G: 255, B: 0, A: 255},
+		FontSize: textConf.FontSize,
+		Color:    textConf.Color,
 	})
 	help.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight - 100})
 	help.AddComponent(&component.StateScoped{Active: ecs.End})
