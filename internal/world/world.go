@@ -12,11 +12,11 @@ func NewFlappyWorld() *ecs.World {
 	// Systems
 	w.AddSystem(system.FlapSystem{})
 	w.AddSystem(system.PauseTransition{})
-	w.AddSystem(system.GravitySystem{})
-	w.AddSystem(system.MovementSystem{})
-	w.AddSystem(system.CollisionSystem{})
 	w.AddSystem(system.CleanupSystem{})
-	w.AddSystem(system.SpawnSystem{})
+	w.AddSystemIn(state.Play, system.GravitySystem{})
+	w.AddSystemIn(state.Play, system.MovementSystem{})
+	w.AddSystemIn(state.Play, system.CollisionSystem{})
+	w.AddSystemIn(state.Play, system.SpawnSystem{})
 
 	// Transitioners
 	w.AddTransitioner(ecs.AnyState, state.Title, &system.TitleTransition{})

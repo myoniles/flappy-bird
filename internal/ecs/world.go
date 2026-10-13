@@ -7,7 +7,7 @@ import (
 
 type World struct {
 	entities      []*Entity
-	systems       []System
+	systems       map[GameState][]System
 	queue         *EventQueue
 	state         GameState
 	nextState     GameState
@@ -20,6 +20,7 @@ type World struct {
 
 func NewWord(initial GameState) *World {
 	w := World{nextState: initial}
+	w.systems = make(map[GameState][]System)
 	w.deleted = make(map[*Entity]struct{})
 	w.resources = make(map[ResourceType]ResourceTyper)
 	w.handlers = make(map[EventType][]EventHandler)
@@ -28,8 +29,14 @@ func NewWord(initial GameState) *World {
 	return &w
 }
 
+// AddSystem is the Same as AddSystemIn(ANYSTATE, sys)
 func (w *World) AddSystem(s ...System) {
-	w.systems = append(w.systems, s...)
+	w.AddSystemIn(AnyState, s...)
+}
+
+func (w *World) AddSystemIn(g GameState, s ...System) {
+	w.systems[g] = append(w.systems[g], s...)
+
 }
 
 func (w *World) OnEvent(e EventType, h EventHandler) {
@@ -42,12 +49,18 @@ func (w *World) AddTransitioner(from, to GameState, t Transitioner) {
 }
 
 func (w *World) Update() {
-	for _, s := range w.systems {
-		s.Update(w)
-	}
+	w.updateSystems()
 	w.processEvents()
 	w.transition()
 	w.cleanup()
+}
+
+func (w *World) updateSystems() {
+	sys := w.systems[AnyState]
+	sys = append(sys, w.systems[w.state]...)
+	for _, s := range sys {
+		s.Update(w)
+	}
 }
 
 func (w *World) transition() {

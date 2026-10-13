@@ -5,7 +5,6 @@ import (
 
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
-	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 type CollisionSystem struct{}
@@ -14,9 +13,6 @@ const CollisionEvent ecs.EventType = "CollisionEvent"
 const GameLossEvent ecs.EventType = "GameOver"
 
 func (c CollisionSystem) Update(w *ecs.World) {
-	if w.State() != state.Play {
-		return
-	}
 	entities := w.Entities()
 	for i, e := range entities {
 		if !isCollidable(e) {

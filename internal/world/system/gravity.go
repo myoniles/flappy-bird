@@ -3,15 +3,11 @@ package system
 import (
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
-	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 type GravitySystem struct{}
 
 func (g GravitySystem) Update(w *ecs.World) {
-	if w.State() != state.Play {
-		return
-	}
 	for _, e := range w.Entities() {
 		if !e.HasComponent(component.TransformType) || !e.HasComponent(component.VelocityType) || !e.HasComponent(component.GravityType) {
 			continue
