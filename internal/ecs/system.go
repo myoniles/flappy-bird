@@ -15,4 +15,9 @@ type transition struct {
 	From GameState
 }
 
+type handlerKey struct {
+	State GameState
+	Event EventType
+}
+
 const AnyState GameState = "ANY"

@@ -49,10 +49,9 @@ func (t *PauseTransition) Transition(w *ecs.World) {
 	w.AddEntity(help)
 }
 
-func (t PauseTransition) Update(w *ecs.World) {
-	if w.State() != state.Pause && w.State() != state.Play {
-		return
-	}
+type PauseSystem struct{}
+
+func (p PauseSystem) Update(w *ecs.World) {
 	if w.Resource(input.StateType).(*input.State).JustPressed(input.Pause) {
 		w.Emit(ecs.Event{
 			Verb: PauseToggleEvent,
@@ -60,10 +59,10 @@ func (t PauseTransition) Update(w *ecs.World) {
 	}
 }
 
-func HandlePauseToggle(w *ecs.World, e ecs.Event) {
-	if w.State() == state.Play {
-		w.SetNextState(state.Pause)
-	} else if w.State() == state.Pause {
-		w.SetNextState(state.Play)
-	}
+func HandlePause(w *ecs.World, e ecs.Event) {
+	w.SetNextState(state.Pause)
+}
+
+func HandleResume(w *ecs.World, e ecs.Event) {
+	w.SetNextState(state.Play)
 }

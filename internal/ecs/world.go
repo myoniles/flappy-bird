@@ -12,7 +12,7 @@ type World struct {
 	state         GameState
 	nextState     GameState
 	resources     map[ResourceType]ResourceTyper
-	handlers      map[EventType][]EventHandler
+	handlers      map[handlerKey][]EventHandler
 	transitioners map[transition][]Transitioner
 
 	deleted map[*Entity]struct{}
@@ -23,7 +23,7 @@ func NewWord(initial GameState) *World {
 	w.systems = make(map[GameState][]System)
 	w.deleted = make(map[*Entity]struct{})
 	w.resources = make(map[ResourceType]ResourceTyper)
-	w.handlers = make(map[EventType][]EventHandler)
+	w.handlers = make(map[handlerKey][]EventHandler)
 	w.transitioners = make(map[transition][]Transitioner)
 	w.queue = &EventQueue{}
 	return &w
@@ -39,8 +39,16 @@ func (w *World) AddSystemIn(g GameState, s ...System) {
 
 }
 
+// OnEvent is the same as OnEventIn(AnyState, e, h)
 func (w *World) OnEvent(e EventType, h EventHandler) {
-	w.handlers[e] = append(w.handlers[e], h)
+	w.OnEventIn(AnyState, e, h)
+}
+
+// OnEventIn registers h to run for events of type e, but only while the world
+// is in state g.
+func (w *World) OnEventIn(g GameState, e EventType, h EventHandler) {
+	k := handlerKey{State: g, Event: e}
+	w.handlers[k] = append(w.handlers[k], h)
 }
 
 func (w *World) AddTransitioner(from, to GameState, t Transitioner) {
@@ -142,7 +150,13 @@ func (w *World) processEvents() {
 		}
 		log.Printf("Processing Event: %p. Subject: %p, Object: %s, verb: 5s", &event.Subject, &event.Object, event.Verb)
 
-		for _, handler := range w.handlers[event.Verb] {
+		// Handlers match on the current state, not the next one, so a handler
+		// that requests a transition can't trigger another state's handlers
+		// for the same event.
+		for _, handler := range w.handlers[handlerKey{State: AnyState, Event: event.Verb}] {
+			handler(w, event)
+		}
+		for _, handler := range w.handlers[handlerKey{State: w.state, Event: event.Verb}] {
 			handler(w, event)
 		}
 	}

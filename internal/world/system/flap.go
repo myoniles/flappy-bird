@@ -14,9 +14,6 @@ const FlapEvent ecs.EventType = "FLAPPINGTHEBIRD"
 type FlapSystem struct{}
 
 func HandleFlap(w *ecs.World, e ecs.Event) {
-	if w.State() != state.Play {
-		return
-	}
 	for _, ent := range w.Entities() {
 		if !ent.HasComponent(component.FlapperType) || !ent.HasComponent(component.VelocityType) {
 			continue
@@ -27,10 +24,8 @@ func HandleFlap(w *ecs.World, e ecs.Event) {
 	}
 }
 
-func HandleTitleFlap(w *ecs.World, e ecs.Event) {
-	if w.State() != state.Title {
-		return
-	}
+// HandleStart begins a round, from either the title screen or the end screen.
+func HandleStart(w *ecs.World, e ecs.Event) {
 	w.SetNextState(state.Play)
 }
 
@@ -39,13 +34,4 @@ func (f FlapSystem) Update(w *ecs.World) {
 		log.Print("Flapping")
 		w.Emit(ecs.Event{Verb: FlapEvent})
 	}
-}
-
-func HandleEndFlap(w *ecs.World, e ecs.Event) {
-	log.Print("Handling Restart")
-	if w.State() != state.End {
-		return
-	}
-	log.Print("Handling Restart")
-	w.SetNextState(state.Play)
 }

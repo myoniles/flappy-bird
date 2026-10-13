@@ -11,12 +11,13 @@ func NewFlappyWorld() *ecs.World {
 
 	// Systems
 	w.AddSystem(system.FlapSystem{})
-	w.AddSystem(system.PauseTransition{})
 	w.AddSystem(system.CleanupSystem{})
 	w.AddSystemIn(state.Play, system.GravitySystem{})
 	w.AddSystemIn(state.Play, system.MovementSystem{})
 	w.AddSystemIn(state.Play, system.CollisionSystem{})
 	w.AddSystemIn(state.Play, system.SpawnSystem{})
+	w.AddSystemIn(state.Play, system.PauseSystem{})
+	w.AddSystemIn(state.Pause, system.PauseSystem{})
 
 	// Transitioners
 	w.AddTransitioner(ecs.AnyState, state.Title, &system.TitleTransition{})
@@ -31,11 +32,14 @@ func NewFlappyWorld() *ecs.World {
 	w.OnEvent(system.CollisionEvent, system.HandleCoinScored)
 	w.OnEvent(system.CollisionEvent, system.HandleBounce)
 	w.OnEvent(system.GameLossEvent, system.HandleGameLossEvent)
-	w.OnEvent(system.FlapEvent, system.HandleFlap)
-	w.OnEvent(system.FlapEvent, system.HandleTitleFlap)
-	w.OnEvent(system.FlapEvent, system.HandleEndFlap)
-	w.OnEvent(system.PauseToggleEvent, system.HandlePauseToggle)
 	w.OnEvent(system.ScoreUpEvent, system.HandleUpdateScoreboard)
 	w.OnEvent(system.SpawnEvent, system.HandleSpawn)
+
+	// Input
+	w.OnEventIn(state.Title, system.FlapEvent, system.HandleStart)
+	w.OnEventIn(state.End, system.FlapEvent, system.HandleStart)
+	w.OnEventIn(state.Play, system.FlapEvent, system.HandleFlap)
+	w.OnEventIn(state.Play, system.PauseToggleEvent, system.HandlePause)
+	w.OnEventIn(state.Pause, system.PauseToggleEvent, system.HandleResume)
 	return w
 }
