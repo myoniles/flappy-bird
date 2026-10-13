@@ -17,12 +17,11 @@ type World struct {
 	nextState ecs.GameState
 	input     input.State
 
-	deleted  map[*ecs.Entity]struct{}
-	gameLost bool
+	deleted map[*ecs.Entity]struct{}
 }
 
 func NewWorld() World {
-	w := World{gameLost: false, nextState: ecs.Title}
+	w := World{nextState: ecs.Title}
 	queue := ecs.EventQueue{}
 	w.deleted = make(map[*ecs.Entity]struct{})
 
@@ -43,8 +42,8 @@ func (w *World) Update(in input.State) {
 		s.Update(w)
 	}
 	w.processEvents()
-	w.cleanup()
 	w.transition()
+	w.cleanup()
 }
 
 func (w *World) transition() {
@@ -103,10 +102,6 @@ func (w *World) Emit(event ecs.Event) {
 	w.queue.Enqueue(event)
 }
 
-func (w World) Lost() bool {
-	return w.gameLost
-}
-
 func (w World) State() ecs.GameState {
 	return w.state
 }
@@ -126,9 +121,6 @@ func (w *World) processEvents() {
 			break
 		}
 		log.Printf("Processing Event: %p. Subject: %p, Object: %s, verb: 5s", &event.Subject, &event.Object, event.Verb)
-		if event.Verb == system.GameLossEvent {
-			w.gameLost = true
-		}
 
 		for _, handler := range system.Handlers[event.Verb] {
 			handler(w, event)

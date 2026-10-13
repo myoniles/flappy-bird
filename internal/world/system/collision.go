@@ -1,7 +1,6 @@
 package system
 
 import (
-	"log"
 
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
@@ -9,7 +8,7 @@ import (
 
 func init() {
 	//Handlers[CollisionEvent] = append(Handlers[CollisionEvent], HandleBlockBack)
-	Handlers[GameLossEvent] = append(Handlers[GameLossEvent], HandleGameLoss)
+	//Handlers[GameLossEvent] = append(Handlers[GameLossEvent], HandleGameLoss)
 }
 
 type CollisionSystem struct{}
@@ -107,16 +106,4 @@ func HandleBlockBack(w ecs.World, event ecs.Event) {
 		v1.X = 0
 		v1.Y = 0
 	}
-}
-
-func HandleGameLoss(w ecs.World, event ecs.Event) {
-	//for _, e := range *entities {
-	//	if e.HasComponent(component.VelocityType) {
-	//		v := event.Object.GetComponent(component.VelocityType).(*component.Velocity)
-	//		v.X = 0
-	//		v.Y = 0
-	//	}
-	//}
-	// TODO there is probably a better way to HandleGameLoss then what is in world
-	log.Print("GAME OVER")
 }

@@ -44,7 +44,7 @@ func (t *PauseTransition) OnEnter(w ecs.World) {
 	help := ecs.NewEntity("HelpText")
 	// TODO config
 	help.AddComponent(&component.Text{
-		Text:     "Press Space to start",
+		Text:     "Press <esc> to resume",
 		FontSize: 40,
 		Color:    color.RGBA{R: 255, G: 255, B: 0, A: 255},
 	})

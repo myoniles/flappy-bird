@@ -11,9 +11,6 @@ func init() { Transitioners[ecs.PlayState] = append(Transitioners[ecs.PlayState]
 type TitleToPlayTransition struct {}
 
 func (t *TitleToPlayTransition) OnEnter(w ecs.World) {
-	if w.State() != ecs.Title {
-		return
-	}
 	bird := entity.NewBird()
 	w.AddEntity(bird)
 	w.AddEntity(entity.NewPipePair()...)

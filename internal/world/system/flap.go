@@ -1,6 +1,8 @@
 package system
 
 import (
+	"log"
+
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/input"
 	"github.com/myoniles/vulcan/internal/world/component"
@@ -13,6 +15,7 @@ type FlapSystem struct{}
 func init() {
 	Handlers[FlapEvent] = append(Handlers[FlapEvent], HandleFlap)
 	Handlers[FlapEvent] = append(Handlers[FlapEvent], HandleTitleFlap)
+	Handlers[FlapEvent] = append(Handlers[FlapEvent], HandleEndFlap)
 }
 
 func HandleFlap(w ecs.World, e ecs.Event) {
@@ -38,6 +41,15 @@ func HandleTitleFlap(w ecs.World, e ecs.Event) {
 
 func (f FlapSystem) Update(w ecs.World) {
 	if w.GetInput().JustPressed(input.Flap) {
+		log.Print("Flapping")
 		w.Emit(ecs.Event{Verb: FlapEvent})
 	}
+}
+
+func HandleEndFlap(w ecs.World, e ecs.Event) {
+	log.Print("Handling Restart")
+	if w.State() != ecs.End {
+		return
+	}
+	w.SetNextState(ecs.PlayState)
 }
