@@ -46,6 +46,6 @@ func NewFloor() *ecs.Entity {
 	windowConf := config.GetWindowConfig()
 	e := NewHorizontal(windowConf.LogicalHeight)
 	e.AddComponent(&component.Collider{Height: 1, Width: windowConf.LogicalWidth, Layer: component.LayerBoundary})
-	e.AddComponent(component.Poisoner{})
+	e.AddComponent(&component.Poisoner{})
 	return e
 }

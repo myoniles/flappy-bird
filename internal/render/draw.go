@@ -28,7 +28,7 @@ func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
 		return
 	}
 
-	s := e.GetComponent(component.SpriteType).(component.Sprite)
+	s := e.GetComponent(component.SpriteType).(*component.Sprite)
 	t := e.GetComponent(component.TransformType).(*component.Transform)
 
 	op := &ebiten.DrawImageOptions{}

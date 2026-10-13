@@ -8,6 +8,6 @@ type Gravity struct {
 	Accel float64
 }
 
-func (g Gravity) Type() ecs.ComponentType {
+func (g *Gravity) Type() ecs.ComponentType {
 	return GravityType
 }

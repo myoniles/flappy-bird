@@ -19,6 +19,6 @@ type Collider struct {
 	Mask          CollisionLayer
 }
 
-func (c Collider) Type() ecs.ComponentType {
+func (c *Collider) Type() ecs.ComponentType {
 	return ColliderType
 }

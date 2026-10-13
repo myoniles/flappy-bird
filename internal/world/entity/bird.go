@@ -19,7 +19,7 @@ func NewBird() *ecs.Entity {
 	e.AddComponent(&component.Transform{X: 100, Y: 100})
 	e.AddComponent(&component.Velocity{X: 0, Y: 0})
 	e.AddComponent(&component.Collider{Width: 50, Height: 50, Layer: component.LayerPlayer, Mask: component.LayerObstacle | component.LayerBoundary})
-	e.AddComponent(component.Gravity{Accel: 12})
+	e.AddComponent(&component.Gravity{Accel: 12})
 	e.AddComponent(&component.Flapper{Impulse: 6})
 	e.AddComponent(&component.Poisonee{})
 	s := component.NewScorer()

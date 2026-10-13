@@ -8,6 +8,6 @@ type Velocity struct {
 	X, Y float64
 }
 
-func (v Velocity) Type() ecs.ComponentType {
+func (v *Velocity) Type() ecs.ComponentType {
 	return VelocityType
 }

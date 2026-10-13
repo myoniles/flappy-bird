@@ -6,4 +6,4 @@ const ConsumableType ecs.ComponentType = "ConsumableType"
 
 type Consumable struct{ Impulse float64 }
 
-func (f Consumable) Type() ecs.ComponentType { return ConsumableType }
+func (f *Consumable) Type() ecs.ComponentType { return ConsumableType }

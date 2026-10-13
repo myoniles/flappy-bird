@@ -10,4 +10,4 @@ type Spawner struct {
 	Factory  func() []*ecs.Entity
 }
 
-func (s Spawner) Type() ecs.ComponentType { return SpawnerType }
+func (s *Spawner) Type() ecs.ComponentType { return SpawnerType }

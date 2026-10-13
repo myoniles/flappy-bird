@@ -13,10 +13,10 @@ type Sprite struct {
 	Img image.Image
 }
 
-func NewStaticSprite(i image.Image) Sprite {
-	return Sprite{i}
+func NewStaticSprite(i image.Image) *Sprite {
+	return &Sprite{i}
 }
 
-func (s Sprite) Type() ecs.ComponentType {
+func (s *Sprite) Type() ecs.ComponentType {
 	return SpriteType
 }

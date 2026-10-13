@@ -10,6 +10,6 @@ type Transform struct {
 	scale    float32
 }
 
-func (p Transform) Type() ecs.ComponentType {
+func (p *Transform) Type() ecs.ComponentType {
 	return TransformType
 }

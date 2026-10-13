@@ -14,7 +14,7 @@ func (g GravitySystem) Update(w *ecs.World) {
 		}
 
 		v := e.GetComponent(component.VelocityType).(*component.Velocity)
-		grav := e.GetComponent(component.GravityType).(component.Gravity)
+		grav := e.GetComponent(component.GravityType).(*component.Gravity)
 
 		v.Y += grav.Accel * (1.0 / 60.0)
 	}
