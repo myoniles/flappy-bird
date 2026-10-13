@@ -10,6 +10,7 @@ import (
 const (
 	BoundaryPrefix    = "boundary"
 	BoundaryThickness = 5
+	MaskPrefix        = "rect"
 )
 
 // NewVertical returns an invisible wall spanning the full logical height,

@@ -8,6 +8,9 @@ import (
 type GravitySystem struct{}
 
 func (g GravitySystem) Update(w ecs.World) {
+	if w.State() != ecs.PlayState {
+		return
+	}
 	for _, e := range w.Entities() {
 		if !e.HasComponent(component.TransformType) || !e.HasComponent(component.VelocityType) || !e.HasComponent(component.GravityType) {
 			continue

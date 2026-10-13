@@ -14,6 +14,9 @@ func init() {
 type SpawnSystem struct{}
 
 func (s SpawnSystem) Update(w ecs.World) {
+	if w.State() != ecs.PlayState {
+		return
+	}
 	for _, e := range w.Entities() {
 		if !e.HasComponent(component.SpawnerType) {
 			continue

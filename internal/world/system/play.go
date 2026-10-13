@@ -6,11 +6,14 @@ import (
 	"github.com/myoniles/vulcan/internal/world/entity"
 )
 
-func init() { Transitioners[ecs.PlayState] = append(Transitioners[ecs.PlayState], &PlayTransition{}) }
+func init() { Transitioners[ecs.PlayState] = append(Transitioners[ecs.PlayState], &TitleToPlayTransition{}) }
 
-type PlayTransition struct {}
+type TitleToPlayTransition struct {}
 
-func (t *PlayTransition) OnEnter(w ecs.World) {
+func (t *TitleToPlayTransition) OnEnter(w ecs.World) {
+	if w.State() != ecs.Title {
+		return
+	}
 	bird := entity.NewBird()
 	w.AddEntity(bird)
 	w.AddEntity(entity.NewPipePair()...)
@@ -23,6 +26,6 @@ func (t *PlayTransition) OnEnter(w ecs.World) {
 	w.AddEntity(pipeSpawner)
 }
 
-func (t *PlayTransition) OnExit(w ecs.World) {
+func (t *TitleToPlayTransition) OnExit(w ecs.World) {
 
 }

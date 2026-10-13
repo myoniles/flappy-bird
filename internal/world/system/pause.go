@@ -2,8 +2,8 @@ package system
 
 import (
 	"image/color"
-	"log"
 
+	"github.com/myoniles/vulcan/internal/asset"
 	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/input"
@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	Transitioners[ecs.Pause] = append(Transitioners[ecs.Pause], &PauseTransition{}) 
+	Transitioners[ecs.Pause] = append(Transitioners[ecs.Pause], &PauseTransition{})
 	Handlers[PauseToggleEvent] = append(Handlers[PauseToggleEvent], HandlePauseToggle)
 }
 
@@ -22,6 +22,14 @@ type PauseTransition struct {
 
 func (t *PauseTransition) OnEnter(w ecs.World) {
 	windowConf := config.GetWindowConfig()
+
+	backgroundMask := ecs.NewEntity("Mask")
+	img := asset.NewRect(windowConf.LogicalWidth, windowConf.LogicalHeight, color.RGBA{R: 50, G: 50, B: 50, A: 200})
+	backgroundMask.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight / 2})
+	backgroundMask.AddComponent(component.NewStaticSprite(&img))
+	backgroundMask.AddComponent(&component.StateScoped{Active: ecs.Pause})
+	w.AddEntity(backgroundMask)
+
 	titleText := ecs.NewEntity("Pause")
 	// TODO config
 	titleText.AddComponent(&component.Text{
@@ -52,9 +60,6 @@ func (t PauseTransition) Update(w ecs.World) {
 	if w.State() != ecs.Pause && w.State() != ecs.PlayState {
 		return
 	}
-	in := w.GetInput()
-	log.Print(in)
-
 	if w.GetInput().JustPressed(input.Pause) {
 		w.Emit(ecs.Event{
 			Verb: PauseToggleEvent,

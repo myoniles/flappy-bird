@@ -77,28 +77,22 @@ func NewPipePair() []*ecs.Entity {
 	inv.AddComponent(&component.Transform{X: xIndex, Y: offset + GapHeight/2})
 	inv.AddComponent(&component.Consumable{})
 	inv.AddComponent(v)
-	img := pipeBody(GapHeight, true)
-	inv.AddComponent(component.NewStaticSprite(&img))
 
 	return []*ecs.Entity{top, bottom, inv}
 }
 
 func bodyPairs(offset int) (image.Image, image.Image) {
 	windowConf := config.GetWindowConfig()
-	topImg := pipeBody(offset, false)
-	bottomImg := pipeBody(windowConf.LogicalHeight-(offset+GapHeight), false)
+	topImg := pipeBody(offset)
+	bottomImg := pipeBody(windowConf.LogicalHeight-(offset+GapHeight))
 	return topImg, bottomImg
 }
 
-func pipeBody(height int, coin bool) image.Image {
+func pipeBody(height int) image.Image {
 	r := image.Rect(0, 0, PipeWidth, height)
 	rgba := image.NewRGBA(r)
 	var green color.Color
-	if coin {
-		green = color.RGBA{225, 0, 0, 255}
-	} else {
-		green = color.RGBA{0, 255, 0, 255}
-	}
+	green = color.RGBA{0, 255, 0, 255}
 	greenSource := image.NewUniform(green)
 	// This writes to rgba
 	draw.Draw(rgba, r.Bounds(), greenSource, image.Point{}, draw.Src)
