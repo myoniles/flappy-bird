@@ -20,7 +20,9 @@ func NewGame() *Game {
 }
 
 func (g *Game) Update() error {
-	g.World.Update(poll())
+	in := poll()
+	g.World.SetResource(&in)
+	g.World.Update()
 	return nil
 }
 

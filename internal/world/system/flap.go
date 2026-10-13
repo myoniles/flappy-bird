@@ -41,7 +41,7 @@ func HandleTitleFlap(w ecs.World, e ecs.Event) {
 }
 
 func (f FlapSystem) Update(w ecs.World) {
-	if w.GetInput().JustPressed(input.Flap) {
+	if w.Resource(input.StateType).(*input.State).JustPressed(input.Flap) {
 		log.Print("Flapping")
 		w.Emit(ecs.Event{Verb: FlapEvent})
 	}

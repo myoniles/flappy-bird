@@ -5,7 +5,6 @@ import (
 	"slices"
 
 	"github.com/myoniles/vulcan/internal/ecs"
-	"github.com/myoniles/vulcan/internal/input"
 	"github.com/myoniles/vulcan/internal/world/system"
 	"github.com/myoniles/vulcan/internal/world/state"
 )
@@ -16,7 +15,7 @@ type World struct {
 	queue     *ecs.EventQueue
 	state     ecs.GameState
 	nextState ecs.GameState
-	input     input.State
+	resources map[ecs.ResourceType]ecs.ResourceTyper
 
 	deleted map[*ecs.Entity]struct{}
 }
@@ -25,6 +24,7 @@ func NewWorld() World {
 	w := World{nextState: state.Title}
 	queue := ecs.EventQueue{}
 	w.deleted = make(map[*ecs.Entity]struct{})
+	w.resources = make(map[ecs.ResourceType]ecs.ResourceTyper)
 
 	w.systems = append(w.systems, system.FlapSystem{})
 	w.systems = append(w.systems, system.PauseTransition{})
@@ -37,8 +37,7 @@ func NewWorld() World {
 	return w
 }
 
-func (w *World) Update(in input.State) {
-	w.input = in
+func (w *World) Update() {
 	for _, s := range w.systems {
 		s.Update(w)
 	}
@@ -129,6 +128,16 @@ func (w *World) processEvents() {
 	}
 }
 
-func (w *World) GetInput() input.State {
-	return w.input
+// Resource returns the stored ResourceTyper. Like components, resources should
+// be stored as pointers so they can be type-asserted and mutated in place.
+func (w World) Resource(t ecs.ResourceType) ecs.ResourceTyper {
+	r, ok := w.resources[t]
+	if !ok {
+		log.Fatalf("World trying to access resource that it does not have: %s", t)
+	}
+	return r
+}
+
+func (w *World) SetResource(r ecs.ResourceTyper) {
+	w.resources[r.Type()] = r
 }

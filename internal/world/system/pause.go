@@ -61,7 +61,7 @@ func (t PauseTransition) Update(w ecs.World) {
 	if w.State() != state.Pause && w.State() != state.Play {
 		return
 	}
-	if w.GetInput().JustPressed(input.Pause) {
+	if w.Resource(input.StateType).(*input.State).JustPressed(input.Pause) {
 		w.Emit(ecs.Event{
 			Verb: PauseToggleEvent,
 		})

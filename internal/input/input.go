@@ -1,5 +1,9 @@
 package input
 
+import "github.com/myoniles/vulcan/internal/ecs"
+
+const StateType ecs.ResourceType = "Input"
+
 type Action uint8
 
 const (
@@ -10,6 +14,8 @@ const (
 type State struct {
 	just uint32
 }
+
+func (s *State) Type() ecs.ResourceType { return StateType }
 
 func (s *State) Trigger(a Action) { s.just |= 1 << a }
 

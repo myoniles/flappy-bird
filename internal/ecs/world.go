@@ -1,7 +1,5 @@
 package ecs
 
-import "github.com/myoniles/vulcan/internal/input"
-
 type GameState string
 
 type World interface {
@@ -12,6 +10,7 @@ type World interface {
 	Emit(ev Event)
 	State() GameState
 	NextState() GameState
-	SetNextState(g GameState) 
-	GetInput() input.State
+	SetNextState(g GameState)
+	Resource(t ResourceType) ResourceTyper
+	SetResource(r ResourceTyper)
 }
