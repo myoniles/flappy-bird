@@ -27,7 +27,7 @@ func NewBird() *ecs.Entity {
 	return e
 }
 
-func loadBirdImage() *image.Image {
+func loadBirdImage() image.Image {
 	if img == nil {
 		log.Print("Loading Bird image")
 		i, _, err := image.Decode(bytes.NewReader(flappy.Gopher_png))
@@ -37,5 +37,5 @@ func loadBirdImage() *image.Image {
 		}
 		img = i
 	}
-	return &img
+	return img
 }

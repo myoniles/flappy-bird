@@ -21,7 +21,7 @@ func (t *EndTransition) Transition(w *ecs.World) {
 	backgroundMask := ecs.NewEntity("Mask")
 	img := asset.NewRect(windowConf.LogicalWidth, windowConf.LogicalHeight, color.RGBA{R: 50, G: 50, B: 50, A: 200})
 	backgroundMask.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight / 2})
-	backgroundMask.AddComponent(component.NewStaticSprite(&img))
+	backgroundMask.AddComponent(component.NewStaticSprite(img))
 	backgroundMask.AddComponent(&component.StateScoped{Active: state.End})
 	w.AddEntity(backgroundMask)
 

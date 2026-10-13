@@ -10,10 +10,10 @@ import (
 const SpriteType ecs.ComponentType = "Sprite"
 
 type Sprite struct {
-	Img *image.Image
+	Img image.Image
 }
 
-func NewStaticSprite(i *image.Image) Sprite {
+func NewStaticSprite(i image.Image) Sprite {
 	return Sprite{i}
 }
 

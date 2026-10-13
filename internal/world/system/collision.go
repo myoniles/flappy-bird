@@ -1,6 +1,8 @@
 package system
 
 import (
+	"math"
+
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
 	"github.com/myoniles/vulcan/internal/world/state"
@@ -88,17 +90,47 @@ func hasPoisoned(e, other *ecs.Entity) bool {
 	return false
 }
 
-func HandleBlockBack(w *ecs.World, event ecs.Event) {
-	if event.Object.HasComponent(component.VelocityType) {
-		v1 := event.Object.GetComponent(component.VelocityType).(*component.Velocity)
-		v1.X = 0
-		v1.Y = 0
-
+// HandleBounce pushes a moving entity out of any Solid it overlaps and reflects
+// its velocity along the axis it penetrated least. Collisions that don't
+// involve a Solid are ignored.
+func HandleBounce(w *ecs.World, event ecs.Event) {
+	mover, solid := event.Subject, event.Object
+	if !solid.HasComponent(component.SolidType) {
+		mover, solid = solid, mover
+	}
+	if !solid.HasComponent(component.SolidType) || !mover.HasComponent(component.VelocityType) {
+		return
 	}
 
-	if event.Subject.HasComponent(component.VelocityType) {
-		v1 := event.Subject.GetComponent(component.VelocityType).(*component.Velocity)
-		v1.X = 0
-		v1.Y = 0
+	s := solid.GetComponent(component.SolidType).(*component.Solid)
+	v := mover.GetComponent(component.VelocityType).(*component.Velocity)
+	mt := mover.GetComponent(component.TransformType).(*component.Transform)
+	st := solid.GetComponent(component.TransformType).(*component.Transform)
+	mc := mover.GetComponent(component.ColliderType).(*component.Collider)
+	sc := solid.GetComponent(component.ColliderType).(*component.Collider)
+
+	// Doubled overlap on each axis, matching isColliding's integer math.
+	overlapX := mc.Width + sc.Width - 2*abs(mt.X-st.X)
+	overlapY := mc.Height + sc.Height - 2*abs(mt.Y-st.Y)
+
+	// Round the push up so the boxes no longer overlap next frame; otherwise
+	// the velocity would flip back and forth while the mover stays stuck.
+	if overlapY <= overlapX {
+		dir := sign(mt.Y - st.Y)
+		mt.Y += dir * (overlapY + 1) / 2
+		v.Y = float64(dir) * math.Abs(v.Y) * s.Restitution
+	} else {
+		dir := sign(mt.X - st.X)
+		mt.X += dir * (overlapX + 1) / 2
+		v.X = float64(dir) * math.Abs(v.X) * s.Restitution
 	}
+}
+
+// sign returns -1 for negative x and 1 otherwise, so dead-center overlaps
+// still get pushed somewhere.
+func sign(x int) int {
+	if x < 0 {
+		return -1
+	}
+	return 1
 }

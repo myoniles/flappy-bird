@@ -13,11 +13,14 @@ import (
 
 var textFaceSource *text.GoTextFaceSource = nil
 
+var sprites = newSpriteCache()
+
 func RenderWorld(w ecs.World, screen *ebiten.Image) {
 	for _, e := range w.Entities() {
 		renderText(e, screen)
 		renderSprite(e, screen)
 	}
+	sprites.sweep()
 }
 
 func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
@@ -30,7 +33,7 @@ func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
 
 	op := &ebiten.DrawImageOptions{}
 
-	spriteImage := ebiten.NewImageFromImage(*s.Img)
+	spriteImage := sprites.get(s.Img)
 	w, h := spriteImage.Bounds().Dx(), spriteImage.Bounds().Dy()
 	// Treat (t.X, t.Y) as the entity's center, not its top-left corner.
 	op.GeoM.Translate(-float64(w)/2.0, -float64(h)/2.0)

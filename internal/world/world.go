@@ -29,7 +29,7 @@ func NewFlappyWorld() *ecs.World {
 	// Event Handlers
 	w.OnEvent(system.DestroyEvent, system.HandleOutOfBounds)
 	w.OnEvent(system.CollisionEvent, system.HandleCoinScored)
-	//w.OnEvent(system.CollisionEvent, system.HandleBlockBack)
+	w.OnEvent(system.CollisionEvent, system.HandleBounce)
 	w.OnEvent(system.GameLossEvent, system.HandleGameLossEvent)
 	w.OnEvent(system.FlapEvent, system.HandleFlap)
 	w.OnEvent(system.FlapEvent, system.HandleTitleFlap)

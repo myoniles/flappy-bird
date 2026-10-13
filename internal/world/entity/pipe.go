@@ -33,7 +33,7 @@ type halfPipe struct {
 
 func NewPipePair() []*ecs.Entity {
 	windowConf := config.GetWindowConfig()
-	offset := rand.IntN(3 * windowConf.LogicalHeight / 4) + 1
+	offset := rand.IntN(3*windowConf.LogicalHeight/4) + 1
 	topImg, bottomImg := bodyPairs(offset)
 
 	bottomHeight := bottomImg.Bounds().Dy()
@@ -46,7 +46,7 @@ func NewPipePair() []*ecs.Entity {
 	top.AddComponent(v)
 	top.AddComponent(p)
 	top.AddComponent(&component.Transform{X: xIndex, Y: offset / 2})
-	top.AddComponent(component.NewStaticSprite(&topImg))
+	top.AddComponent(component.NewStaticSprite(topImg))
 	top.AddComponent(
 		&component.Collider{
 			Width:  PipeWidth,
@@ -62,7 +62,7 @@ func NewPipePair() []*ecs.Entity {
 			X: xIndex,
 			Y: windowConf.LogicalHeight - bottomHeight/2,
 		})
-	bottom.AddComponent(component.NewStaticSprite(&bottomImg))
+	bottom.AddComponent(component.NewStaticSprite(bottomImg))
 	bottom.AddComponent(
 		&component.Collider{
 			Width:  PipeWidth,

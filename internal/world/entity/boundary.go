@@ -38,6 +38,7 @@ func NewCeiling() *ecs.Entity {
 
 	e := NewHorizontal(0)
 	e.AddComponent(&component.Collider{Height: 1, Width: windowConf.LogicalWidth, Layer: component.LayerBoundary})
+	e.AddComponent(&component.Solid{Restitution: 0.5})
 	return e
 }
 
