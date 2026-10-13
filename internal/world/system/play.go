@@ -4,9 +4,10 @@ import (
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
 	"github.com/myoniles/vulcan/internal/world/entity"
+	"github.com/myoniles/vulcan/internal/world/state"
 )
 
-func init() { Transitioners[ecs.PlayState] = append(Transitioners[ecs.PlayState], &TitleToPlayTransition{}) }
+func init() { Transitioners[state.Play] = append(Transitioners[state.Play], &TitleToPlayTransition{}) }
 
 type TitleToPlayTransition struct {}
 

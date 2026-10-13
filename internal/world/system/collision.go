@@ -4,6 +4,7 @@ import (
 
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
+	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 func init() {
@@ -17,7 +18,7 @@ const CollisionEvent ecs.EventType = "CollisionEvent"
 const GameLossEvent ecs.EventType = "GameOver"
 
 func (c CollisionSystem) Update(w ecs.World) {
-	if w.State() != ecs.PlayState {
+	if w.State() != state.Play {
 		return
 	}
 	entities := w.Entities()

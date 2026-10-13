@@ -8,10 +8,11 @@ import (
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/input"
 	"github.com/myoniles/vulcan/internal/world/component"
+	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 func init() {
-	Transitioners[ecs.Pause] = append(Transitioners[ecs.Pause], &PauseTransition{})
+	Transitioners[state.Pause] = append(Transitioners[state.Pause], &PauseTransition{})
 	Handlers[PauseToggleEvent] = append(Handlers[PauseToggleEvent], HandlePauseToggle)
 }
 
@@ -27,7 +28,7 @@ func (t *PauseTransition) OnEnter(w ecs.World) {
 	img := asset.NewRect(windowConf.LogicalWidth, windowConf.LogicalHeight, color.RGBA{R: 50, G: 50, B: 50, A: 200})
 	backgroundMask.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight / 2})
 	backgroundMask.AddComponent(component.NewStaticSprite(&img))
-	backgroundMask.AddComponent(&component.StateScoped{Active: ecs.Pause})
+	backgroundMask.AddComponent(&component.StateScoped{Active: state.Pause})
 	w.AddEntity(backgroundMask)
 
 	titleText := ecs.NewEntity("Pause")
@@ -38,7 +39,7 @@ func (t *PauseTransition) OnEnter(w ecs.World) {
 		Color:    textConf.Color,
 	})
 	titleText.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: 200})
-	titleText.AddComponent(&component.StateScoped{Active: ecs.Pause})
+	titleText.AddComponent(&component.StateScoped{Active: state.Pause})
 	w.AddEntity(titleText)
 
 	help := ecs.NewEntity("HelpText")
@@ -49,7 +50,7 @@ func (t *PauseTransition) OnEnter(w ecs.World) {
 		Color:    textConf.Color,
 	})
 	help.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight - 100})
-	help.AddComponent(&component.StateScoped{Active: ecs.Pause})
+	help.AddComponent(&component.StateScoped{Active: state.Pause})
 	w.AddEntity(help)
 }
 
@@ -57,7 +58,7 @@ func (t *PauseTransition) OnExit(w ecs.World) {
 }
 
 func (t PauseTransition) Update(w ecs.World) {
-	if w.State() != ecs.Pause && w.State() != ecs.PlayState {
+	if w.State() != state.Pause && w.State() != state.Play {
 		return
 	}
 	if w.GetInput().JustPressed(input.Pause) {
@@ -68,9 +69,9 @@ func (t PauseTransition) Update(w ecs.World) {
 }
 
 func HandlePauseToggle(w ecs.World, e ecs.Event) {
-	if w.State() == ecs.PlayState {
-		w.SetNextState(ecs.Pause)
-	} else if w.State() == ecs.Pause {
-		w.SetNextState(ecs.PlayState)
+	if w.State() == state.Play {
+		w.SetNextState(state.Pause)
+	} else if w.State() == state.Pause {
+		w.SetNextState(state.Play)
 	}
 }

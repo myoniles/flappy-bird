@@ -7,10 +7,11 @@ import (
 	"github.com/myoniles/vulcan/internal/config"
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
+	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 func init() {
-	Transitioners[ecs.End] = append(Transitioners[ecs.End], &EndTransition{})
+	Transitioners[state.End] = append(Transitioners[state.End], &EndTransition{})
 	Handlers[GameLossEvent] = append(Handlers[GameLossEvent], HandleGameLossEvent)
 }
 
@@ -24,7 +25,7 @@ func (t *EndTransition) OnEnter(w ecs.World) {
 	img := asset.NewRect(windowConf.LogicalWidth, windowConf.LogicalHeight, color.RGBA{R: 50, G: 50, B: 50, A: 200})
 	backgroundMask.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight / 2})
 	backgroundMask.AddComponent(component.NewStaticSprite(&img))
-	backgroundMask.AddComponent(&component.StateScoped{Active: ecs.End})
+	backgroundMask.AddComponent(&component.StateScoped{Active: state.End})
 	w.AddEntity(backgroundMask)
 
 	titleText := ecs.NewEntity("End")
@@ -35,7 +36,7 @@ func (t *EndTransition) OnEnter(w ecs.World) {
 		Color:    textConf.Color,
 	})
 	titleText.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: 200})
-	titleText.AddComponent(&component.StateScoped{Active: ecs.End})
+	titleText.AddComponent(&component.StateScoped{Active: state.End})
 	w.AddEntity(titleText)
 
 
@@ -47,7 +48,7 @@ func (t *EndTransition) OnEnter(w ecs.World) {
 		Color:    textConf.Color,
 	})
 	help.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight - 100})
-	help.AddComponent(&component.StateScoped{Active: ecs.End})
+	help.AddComponent(&component.StateScoped{Active: state.End})
 	w.AddEntity(help)
 }
 
@@ -58,5 +59,5 @@ func (t *EndTransition) OnExit(w ecs.World) {
 }
 
 func HandleGameLossEvent(w ecs.World, e ecs.Event) {
-	w.SetNextState(ecs.End)
+	w.SetNextState(state.End)
 }

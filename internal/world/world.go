@@ -7,6 +7,7 @@ import (
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/input"
 	"github.com/myoniles/vulcan/internal/world/system"
+	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 type World struct {
@@ -21,7 +22,7 @@ type World struct {
 }
 
 func NewWorld() World {
-	w := World{nextState: ecs.Title}
+	w := World{nextState: state.Title}
 	queue := ecs.EventQueue{}
 	w.deleted = make(map[*ecs.Entity]struct{})
 

@@ -5,6 +5,7 @@ import (
 
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
+	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 func init() {
@@ -14,7 +15,7 @@ func init() {
 const ScoreUpEvent ecs.EventType = "CoinScored"
 
 func HandleCoinScored(w ecs.World, e ecs.Event) {
-	if w.State() != ecs.PlayState {
+	if w.State() != state.Play {
 		return
 	}
 	if e.Verb != CollisionEvent {

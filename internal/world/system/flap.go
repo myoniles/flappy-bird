@@ -6,6 +6,7 @@ import (
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/input"
 	"github.com/myoniles/vulcan/internal/world/component"
+	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 const FlapEvent ecs.EventType = "FLAPPINGTHEBIRD"
@@ -19,7 +20,7 @@ func init() {
 }
 
 func HandleFlap(w ecs.World, e ecs.Event) {
-	if w.State() != ecs.PlayState {
+	if w.State() != state.Play {
 		return
 	}
 	for _, ent := range w.Entities() {
@@ -33,10 +34,10 @@ func HandleFlap(w ecs.World, e ecs.Event) {
 }
 
 func HandleTitleFlap(w ecs.World, e ecs.Event) {
-	if w.State() != ecs.Title {
+	if w.State() != state.Title {
 		return
 	}
-	w.SetNextState(ecs.PlayState)
+	w.SetNextState(state.Play)
 }
 
 func (f FlapSystem) Update(w ecs.World) {
@@ -48,8 +49,8 @@ func (f FlapSystem) Update(w ecs.World) {
 
 func HandleEndFlap(w ecs.World, e ecs.Event) {
 	log.Print("Handling Restart")
-	if w.State() != ecs.End {
+	if w.State() != state.End {
 		return
 	}
-	w.SetNextState(ecs.PlayState)
+	w.SetNextState(state.Play)
 }
