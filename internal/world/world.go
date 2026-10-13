@@ -10,11 +10,12 @@ import (
 )
 
 type World struct {
-	entities []*ecs.Entity
-	systems  []ecs.System
-	queue    *ecs.EventQueue
-	state    ecs.GameState
-	nextState    ecs.GameState
+	entities  []*ecs.Entity
+	systems   []ecs.System
+	queue     *ecs.EventQueue
+	state     ecs.GameState
+	nextState ecs.GameState
+	input     input.State
 
 	deleted  map[*ecs.Entity]struct{}
 	gameLost bool
@@ -25,6 +26,8 @@ func NewWorld() World {
 	queue := ecs.EventQueue{}
 	w.deleted = make(map[*ecs.Entity]struct{})
 
+	w.systems = append(w.systems, system.FlapSystem{})
+	w.systems = append(w.systems, system.PauseTransition{})
 	w.systems = append(w.systems, system.GravitySystem{})
 	w.systems = append(w.systems, system.MovementSystem{})
 	w.systems = append(w.systems, system.CollisionSystem{})
@@ -35,10 +38,7 @@ func NewWorld() World {
 }
 
 func (w *World) Update(in input.State) {
-	if in.JustPressed(input.Flap) {
-		w.queue.Enqueue(ecs.Event{Verb: system.FlapEvent})
-	}
-
+	w.input = in
 	for _, s := range w.systems {
 		s.Update(w)
 	}
@@ -134,4 +134,8 @@ func (w *World) processEvents() {
 			handler(w, event)
 		}
 	}
+}
+
+func (w *World) GetInput() input.State {
+	return w.input
 }

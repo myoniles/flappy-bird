@@ -8,6 +8,10 @@ import (
 type MovementSystem struct{}
 
 func (g MovementSystem) Update(w ecs.World) {
+	if w.State() != ecs.PlayState {
+		return
+	}
+
 	for _, e := range w.Entities() {
 		if !e.HasComponent(component.TransformType) || !e.HasComponent(component.VelocityType) {
 			continue

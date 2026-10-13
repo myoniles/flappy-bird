@@ -11,6 +11,7 @@ var keyBindings = map[ebiten.Key]input.Action{
 	ebiten.KeyArrowUp: input.Flap,
 	ebiten.KeyW:       input.Flap,
 	ebiten.KeyEscape:  input.Pause,
+	ebiten.KeyP:       input.Pause,
 }
 
 func poll() input.State {

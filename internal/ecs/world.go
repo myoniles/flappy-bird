@@ -1,5 +1,7 @@
 package ecs
 
+import "github.com/myoniles/vulcan/internal/input"
+
 type GameState string
 
 type World interface {
@@ -11,4 +13,5 @@ type World interface {
 	State() GameState
 	NextState() GameState
 	SetNextState(g GameState) 
+	GetInput() input.State
 }

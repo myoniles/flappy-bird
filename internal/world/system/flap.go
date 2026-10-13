@@ -1,13 +1,14 @@
 package system
 
 import (
-	"log"
-
 	"github.com/myoniles/vulcan/internal/ecs"
+	"github.com/myoniles/vulcan/internal/input"
 	"github.com/myoniles/vulcan/internal/world/component"
 )
 
 const FlapEvent ecs.EventType = "FLAPPINGTHEBIRD"
+
+type FlapSystem struct{}
 
 func init() {
 	Handlers[FlapEvent] = append(Handlers[FlapEvent], HandleFlap)
@@ -29,9 +30,14 @@ func HandleFlap(w ecs.World, e ecs.Event) {
 }
 
 func HandleTitleFlap(w ecs.World, e ecs.Event) {
-	log.Print("Handling Flap")
 	if w.State() != ecs.Title {
 		return
 	}
 	w.SetNextState(ecs.PlayState)
+}
+
+func (f FlapSystem) Update(w ecs.World) {
+	if w.GetInput().JustPressed(input.Flap) {
+		w.Emit(ecs.Event{Verb: FlapEvent})
+	}
 }
