@@ -35,10 +35,6 @@ func (c CollisionSystem) Update(w *ecs.World) {
 					Verb:    CollisionEvent,
 				}
 				w.Emit(event)
-
-				if hasPoisoned(e, other) {
-					w.Emit(ecs.Event{Verb: GameLossEvent})
-				}
 			}
 		}
 	}
@@ -80,16 +76,6 @@ func abs(x int) int {
 		return -x
 	}
 	return x
-}
-
-func hasPoisoned(e, other *ecs.Entity) bool {
-	if e.HasComponent(component.PoisoneeType) && other.HasComponent(component.PoisonerType) {
-		return true
-	}
-	if e.HasComponent(component.PoisonerType) && other.HasComponent(component.PoisoneeType) {
-		return true
-	}
-	return false
 }
 
 // HandleBounce pushes a moving entity out of any Solid it overlaps and reflects
