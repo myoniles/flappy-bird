@@ -49,8 +49,8 @@ func isCollidable(e *ecs.Entity) bool {
 }
 
 func isColliding(e1 *ecs.Entity, e2 *ecs.Entity) bool {
-	b1, ok1 := ecs.TryGet[*component.Collider](e1)
-	b2, ok2 := ecs.TryGet[*component.Collider](e2)
+	b1, ok1 := ecs.Get[*component.Collider](e1)
+	b2, ok2 := ecs.Get[*component.Collider](e2)
 	if !ok1 || !ok2 {
 		return false
 	}
@@ -60,8 +60,8 @@ func isColliding(e1 *ecs.Entity, e2 *ecs.Entity) bool {
 		return false
 	}
 
-	t1, ok1 := ecs.TryGet[*component.Transform](e1)
-	t2, ok2 := ecs.TryGet[*component.Transform](e2)
+	t1, ok1 := ecs.Get[*component.Transform](e1)
+	t2, ok2 := ecs.Get[*component.Transform](e2)
 	if !ok1 || !ok2 {
 		return false
 	}
@@ -100,18 +100,18 @@ func HandleBounce(w *ecs.World, event ecs.Event) {
 	if !solid.HasComponent(component.SolidType) {
 		mover, solid = solid, mover
 	}
-	s, ok := ecs.TryGet[*component.Solid](solid)
+	s, ok := ecs.Get[*component.Solid](solid)
 	if !ok {
 		return
 	}
-	v, ok := ecs.TryGet[*component.Velocity](mover)
+	v, ok := ecs.Get[*component.Velocity](mover)
 	if !ok {
 		return
 	}
-	mt, ok1 := ecs.TryGet[*component.Transform](mover)
-	st, ok2 := ecs.TryGet[*component.Transform](solid)
-	mc, ok3 := ecs.TryGet[*component.Collider](mover)
-	sc, ok4 := ecs.TryGet[*component.Collider](solid)
+	mt, ok1 := ecs.Get[*component.Transform](mover)
+	st, ok2 := ecs.Get[*component.Transform](solid)
+	mc, ok3 := ecs.Get[*component.Collider](mover)
+	sc, ok4 := ecs.Get[*component.Collider](solid)
 	if !ok1 || !ok2 || !ok3 || !ok4 {
 		return
 	}

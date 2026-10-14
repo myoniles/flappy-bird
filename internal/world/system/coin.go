@@ -42,7 +42,7 @@ func HandleCoinScored(w *ecs.World, e ecs.Event) {
 		return
 	}
 
-	scoreComp, ok := ecs.TryGet[*component.Scorer](scorer)
+	scoreComp, ok := ecs.Get[*component.Scorer](scorer)
 	if !ok {
 		return
 	}

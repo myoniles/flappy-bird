@@ -24,11 +24,11 @@ func RenderWorld(w ecs.World, screen *ebiten.Image) {
 }
 
 func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
-	s, ok := ecs.TryGet[*component.Sprite](e)
+	s, ok := ecs.Get[*component.Sprite](e)
 	if !ok {
 		return
 	}
-	t, ok := ecs.TryGet[*component.Transform](e)
+	t, ok := ecs.Get[*component.Transform](e)
 	if !ok {
 		return
 	}
@@ -46,11 +46,11 @@ func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
 }
 
 func renderText(e *ecs.Entity, screen *ebiten.Image) {
-	textComponent, ok := ecs.TryGet[*component.Text](e)
+	textComponent, ok := ecs.Get[*component.Text](e)
 	if !ok {
 		return
 	}
-	transform, ok := ecs.TryGet[*component.Transform](e)
+	transform, ok := ecs.Get[*component.Transform](e)
 	if !ok {
 		return
 	}

@@ -11,7 +11,7 @@ import (
 func HandleUpdateScoreboard(w *ecs.World, event ecs.Event) {
 	scoreBoards := w.Query(component.ScorerBoardType)
 	scorer := event.Subject
-	scoreComp, ok := ecs.TryGet[*component.Scorer](scorer)
+	scoreComp, ok := ecs.Get[*component.Scorer](scorer)
 	if !ok {
 		log.Panicf("Entity %s has no Scorer", scorer.Id())
 	}
@@ -21,7 +21,7 @@ func HandleUpdateScoreboard(w *ecs.World, event ecs.Event) {
 	}
 	sb := scoreBoards[0]
 
-	txt, ok := ecs.TryGet[*component.Text](sb)
+	txt, ok := ecs.Get[*component.Text](sb)
 	if !ok {
 		log.Panicf("Scoreboard %s has no Text", sb.Id())
 	}

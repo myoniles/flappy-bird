@@ -9,11 +9,11 @@ type MovementSystem struct{}
 
 func (g MovementSystem) Update(w *ecs.World) {
 	for _, e := range w.Entities() {
-		v, ok := ecs.TryGet[*component.Velocity](e)
+		v, ok := ecs.Get[*component.Velocity](e)
 		if !ok {
 			continue
 		}
-		t, ok := ecs.TryGet[*component.Transform](e)
+		t, ok := ecs.Get[*component.Transform](e)
 		if !ok {
 			continue
 		}

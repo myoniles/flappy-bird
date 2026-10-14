@@ -12,11 +12,11 @@ func (g GravitySystem) Update(w *ecs.World) {
 		if !e.HasComponent(component.TransformType) {
 			continue
 		}
-		v, ok := ecs.TryGet[*component.Velocity](e)
+		v, ok := ecs.Get[*component.Velocity](e)
 		if !ok {
 			continue
 		}
-		grav, ok := ecs.TryGet[*component.Gravity](e)
+		grav, ok := ecs.Get[*component.Gravity](e)
 		if !ok {
 			continue
 		}

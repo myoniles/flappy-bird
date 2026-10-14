@@ -17,7 +17,7 @@ type CleanupSystem struct{}
 func (c CleanupSystem) Update(w *ecs.World) {
 	entities := w.Query(component.TransformType)
 	for _, e := range entities {
-		t, ok := ecs.TryGet[*component.Transform](e)
+		t, ok := ecs.Get[*component.Transform](e)
 		if !ok {
 			continue
 		}
@@ -29,7 +29,7 @@ func (c CleanupSystem) Update(w *ecs.World) {
 
 	entities = w.Query(component.StateScopedType)
 	for _, e := range entities {
-		scope, ok := ecs.TryGet[*component.StateScoped](e)
+		scope, ok := ecs.Get[*component.StateScoped](e)
 		if !ok {
 			continue
 		}

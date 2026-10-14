@@ -11,7 +11,7 @@ type SpawnSystem struct{}
 
 func (s SpawnSystem) Update(w *ecs.World) {
 	for _, e := range w.Entities() {
-		sp, ok := ecs.TryGet[*component.Spawner](e)
+		sp, ok := ecs.Get[*component.Spawner](e)
 		if !ok {
 			continue
 		}
@@ -27,7 +27,7 @@ func (s SpawnSystem) Update(w *ecs.World) {
 }
 
 func HandleSpawn(w *ecs.World, e ecs.Event) {
-	sp, ok := ecs.TryGet[*component.Spawner](e.Subject)
+	sp, ok := ecs.Get[*component.Spawner](e.Subject)
 	if !ok {
 		return
 	}
