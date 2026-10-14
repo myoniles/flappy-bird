@@ -9,12 +9,14 @@ type MovementSystem struct{}
 
 func (g MovementSystem) Update(w *ecs.World) {
 	for _, e := range w.Entities() {
-		if !e.HasComponent(component.TransformType) || !e.HasComponent(component.VelocityType) {
+		v, ok := ecs.TryGet[*component.Velocity](e)
+		if !ok {
 			continue
 		}
-
-		v := e.GetComponent(component.VelocityType).(*component.Velocity)
-		t := e.GetComponent(component.TransformType).(*component.Transform)
+		t, ok := ecs.TryGet[*component.Transform](e)
+		if !ok {
+			continue
+		}
 
 		t.X = t.X + int(v.X)
 		t.Y = t.Y + int(v.Y)

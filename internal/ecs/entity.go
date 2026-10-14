@@ -30,10 +30,6 @@ func (e *Entity) HasComponent(c ComponentType) bool {
 	return ok
 }
 
-// GetComponent returns the stored ComponentTyper. Components should be added
-// as pointers (e.g. &component.Velocity{...}) so the returned interface can
-// be type-asserted back to that pointer type and mutated in place, with no
-// write-back needed.
 func (e *Entity) GetComponent(c ComponentType) ComponentTyper {
 	if !e.HasComponent(c) {
 		log.Fatalf("Component %s trying to access component that it does not have: %s", e.id, c)
@@ -47,6 +43,15 @@ func (e *Entity) AddComponent(ct ComponentTyper) {
 
 func (e *Entity) Id() string {
 	return e.id
+}
+
+func Get[T ComponentTyper](e *Entity) (T, bool) {
+	var zero T
+	c, ok := e.components[zero.Type()]
+	if !ok {
+		return zero, false
+	}
+	return c.(T), true
 }
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

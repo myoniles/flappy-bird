@@ -9,12 +9,17 @@ type GravitySystem struct{}
 
 func (g GravitySystem) Update(w *ecs.World) {
 	for _, e := range w.Entities() {
-		if !e.HasComponent(component.TransformType) || !e.HasComponent(component.VelocityType) || !e.HasComponent(component.GravityType) {
+		if !e.HasComponent(component.TransformType) {
 			continue
 		}
-
-		v := e.GetComponent(component.VelocityType).(*component.Velocity)
-		grav := e.GetComponent(component.GravityType).(*component.Gravity)
+		v, ok := ecs.TryGet[*component.Velocity](e)
+		if !ok {
+			continue
+		}
+		grav, ok := ecs.TryGet[*component.Gravity](e)
+		if !ok {
+			continue
+		}
 
 		v.Y += grav.Accel * (1.0 / 60.0)
 	}

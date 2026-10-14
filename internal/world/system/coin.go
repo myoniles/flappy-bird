@@ -42,7 +42,10 @@ func HandleCoinScored(w *ecs.World, e ecs.Event) {
 		return
 	}
 
-	scoreComp := scorer.GetComponent(component.ScorerType).(*component.Scorer)
+	scoreComp, ok := ecs.TryGet[*component.Scorer](scorer)
+	if !ok {
+		return
+	}
 	scoreComp.Increment()
 	w.RemoveEntity(coin)
 	log.Printf("%s captured %s. %s's score now at %d", scorer.Id(), coin.Id(), scoreComp.Type(), scoreComp.Score())

@@ -24,12 +24,14 @@ func RenderWorld(w ecs.World, screen *ebiten.Image) {
 }
 
 func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
-	if !e.HasComponent(component.SpriteType) || !e.HasComponent(component.TransformType) {
+	s, ok := ecs.TryGet[*component.Sprite](e)
+	if !ok {
 		return
 	}
-
-	s := e.GetComponent(component.SpriteType).(*component.Sprite)
-	t := e.GetComponent(component.TransformType).(*component.Transform)
+	t, ok := ecs.TryGet[*component.Transform](e)
+	if !ok {
+		return
+	}
 
 	op := &ebiten.DrawImageOptions{}
 
@@ -44,16 +46,18 @@ func renderSprite(e *ecs.Entity, screen *ebiten.Image) {
 }
 
 func renderText(e *ecs.Entity, screen *ebiten.Image) {
-	if !e.HasComponent(component.TextType) || !e.HasComponent(component.TransformType) {
+	textComponent, ok := ecs.TryGet[*component.Text](e)
+	if !ok {
+		return
+	}
+	transform, ok := ecs.TryGet[*component.Transform](e)
+	if !ok {
 		return
 	}
 
 	if textFaceSource == nil {
 		loadFont()
 	}
-
-	textComponent := e.GetComponent(component.TextType).(*component.Text)
-	transform := e.GetComponent(component.TransformType).(*component.Transform)
 
 	face := &text.GoTextFace{
 		Size:   float64(textComponent.FontSize),

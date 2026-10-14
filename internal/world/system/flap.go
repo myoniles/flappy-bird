@@ -15,11 +15,14 @@ type FlapSystem struct{}
 
 func HandleFlap(w *ecs.World, e ecs.Event) {
 	for _, ent := range w.Entities() {
-		if !ent.HasComponent(component.FlapperType) || !ent.HasComponent(component.VelocityType) {
+		f, ok := ecs.TryGet[*component.Flapper](ent)
+		if !ok {
 			continue
 		}
-		f := ent.GetComponent(component.FlapperType).(*component.Flapper)
-		v := ent.GetComponent(component.VelocityType).(*component.Velocity)
+		v, ok := ecs.TryGet[*component.Velocity](ent)
+		if !ok {
+			continue
+		}
 		v.Y = -f.Impulse
 	}
 }

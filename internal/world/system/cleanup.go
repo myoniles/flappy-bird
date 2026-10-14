@@ -17,7 +17,10 @@ type CleanupSystem struct{}
 func (c CleanupSystem) Update(w *ecs.World) {
 	entities := w.Query(component.TransformType)
 	for _, e := range entities {
-		t := e.GetComponent(component.TransformType).(*component.Transform)
+		t, ok := ecs.TryGet[*component.Transform](e)
+		if !ok {
+			continue
+		}
 		if isOutOfBounds(t.X, t.Y) {
 			event := ecs.Event{Subject: e, Verb: DestroyEvent}
 			w.Emit(event)
@@ -26,7 +29,10 @@ func (c CleanupSystem) Update(w *ecs.World) {
 
 	entities = w.Query(component.StateScopedType)
 	for _, e := range entities {
-		scope := e.GetComponent(component.StateScopedType).(*component.StateScoped)
+		scope, ok := ecs.TryGet[*component.StateScoped](e)
+		if !ok {
+			continue
+		}
 		if w.State() != scope.Active {
 			event := ecs.Event{Subject: e, Verb: DestroyEvent}
 			w.Emit(event)

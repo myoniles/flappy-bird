@@ -49,16 +49,22 @@ func isCollidable(e *ecs.Entity) bool {
 }
 
 func isColliding(e1 *ecs.Entity, e2 *ecs.Entity) bool {
-	b1 := e1.GetComponent(component.ColliderType).(*component.Collider)
-	b2 := e2.GetComponent(component.ColliderType).(*component.Collider)
+	b1, ok1 := ecs.TryGet[*component.Collider](e1)
+	b2, ok2 := ecs.TryGet[*component.Collider](e2)
+	if !ok1 || !ok2 {
+		return false
+	}
 
 	// Check if they *can* even collide based on their layers
 	if b1.Mask&b2.Layer == 0 && b2.Mask&b1.Layer == 0 {
 		return false
 	}
 
-	t1 := e1.GetComponent(component.TransformType).(*component.Transform)
-	t2 := e2.GetComponent(component.TransformType).(*component.Transform)
+	t1, ok1 := ecs.TryGet[*component.Transform](e1)
+	t2, ok2 := ecs.TryGet[*component.Transform](e2)
+	if !ok1 || !ok2 {
+		return false
+	}
 
 	// Both transforms and colliders are centered, so two boxes overlap on an
 	// axis when the distance between centers is less than the sum of their
@@ -94,16 +100,21 @@ func HandleBounce(w *ecs.World, event ecs.Event) {
 	if !solid.HasComponent(component.SolidType) {
 		mover, solid = solid, mover
 	}
-	if !solid.HasComponent(component.SolidType) || !mover.HasComponent(component.VelocityType) {
+	s, ok := ecs.TryGet[*component.Solid](solid)
+	if !ok {
 		return
 	}
-
-	s := solid.GetComponent(component.SolidType).(*component.Solid)
-	v := mover.GetComponent(component.VelocityType).(*component.Velocity)
-	mt := mover.GetComponent(component.TransformType).(*component.Transform)
-	st := solid.GetComponent(component.TransformType).(*component.Transform)
-	mc := mover.GetComponent(component.ColliderType).(*component.Collider)
-	sc := solid.GetComponent(component.ColliderType).(*component.Collider)
+	v, ok := ecs.TryGet[*component.Velocity](mover)
+	if !ok {
+		return
+	}
+	mt, ok1 := ecs.TryGet[*component.Transform](mover)
+	st, ok2 := ecs.TryGet[*component.Transform](solid)
+	mc, ok3 := ecs.TryGet[*component.Collider](mover)
+	sc, ok4 := ecs.TryGet[*component.Collider](solid)
+	if !ok1 || !ok2 || !ok3 || !ok4 {
+		return
+	}
 
 	// Doubled overlap on each axis, matching isColliding's integer math.
 	overlapX := mc.Width + sc.Width - 2*abs(mt.X-st.X)

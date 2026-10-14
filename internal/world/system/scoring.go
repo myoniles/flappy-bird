@@ -11,13 +11,19 @@ import (
 func HandleUpdateScoreboard(w *ecs.World, event ecs.Event) {
 	scoreBoards := w.Query(component.ScorerBoardType)
 	scorer := event.Subject
-	scoreComp := scorer.GetComponent(component.ScorerType).(*component.Scorer)
+	scoreComp, ok := ecs.TryGet[*component.Scorer](scorer)
+	if !ok {
+		log.Panicf("Entity %s has no Scorer", scorer.Id())
+	}
 	newScore := scoreComp.Score()
 	if len(scoreBoards) == 0 {
 		log.Panic("There should be at least one scorebaord")
 	}
 	sb := scoreBoards[0]
 
-	txt := sb.GetComponent(component.TextType).(*component.Text)
+	txt, ok := ecs.TryGet[*component.Text](sb)
+	if !ok {
+		log.Panicf("Scoreboard %s has no Text", sb.Id())
+	}
 	txt.Text = fmt.Sprintf("Score:\n%d", newScore)
 }
