@@ -19,6 +19,7 @@ type PauseTransition struct {
 func (t *PauseTransition) Transition(w *ecs.World) {
 	windowConf := config.GetWindowConfig()
 
+	// Grayed out background
 	backgroundMask := ecs.NewEntity("Mask")
 	img := asset.NewRect(windowConf.LogicalWidth, windowConf.LogicalHeight, color.RGBA{R: 50, G: 50, B: 50, A: 200})
 	backgroundMask.AddComponent(&component.Transform{X: windowConf.LogicalWidth / 2, Y: windowConf.LogicalHeight / 2})
@@ -26,6 +27,7 @@ func (t *PauseTransition) Transition(w *ecs.World) {
 	backgroundMask.AddComponent(&component.StateScoped{Active: state.Pause})
 	w.AddEntity(backgroundMask)
 
+	// Pause Text
 	titleText := ecs.NewEntity("Pause")
 	textConf := config.TitleTextConfig()
 	titleText.AddComponent(&component.Text{
@@ -37,6 +39,7 @@ func (t *PauseTransition) Transition(w *ecs.World) {
 	titleText.AddComponent(&component.StateScoped{Active: state.Pause})
 	w.AddEntity(titleText)
 
+	// Help Text to escape pause
 	help := ecs.NewEntity("HelpText")
 	textConf = config.HelperTextConfig()
 	help.AddComponent(&component.Text{
