@@ -13,21 +13,10 @@ const CollisionEvent ecs.EventType = "CollisionEvent"
 const GameLossEvent ecs.EventType = "GameOver"
 
 func (c CollisionSystem) Update(w *ecs.World) {
-	entities := w.Entities()
+	entities := w.Query(component.ColliderType)
 	for i, e := range entities {
-		if !isCollidable(e) {
-			continue
-		}
-
 		// start at i+1 so each pair is checked once and never against itself
 		for _, other := range entities[i+1:] {
-			if !isCollidable(other) {
-				continue
-			}
-			// two static things (e.g. a wall and the floor) touching is not news
-			if !e.HasComponent(component.VelocityType) && !other.HasComponent(component.VelocityType) {
-				continue
-			}
 			if isColliding(e, other) {
 				event := ecs.Event{
 					Subject: e,
@@ -40,10 +29,8 @@ func (c CollisionSystem) Update(w *ecs.World) {
 	}
 }
 
-func isCollidable(e *ecs.Entity) bool {
-	return e.HasComponent(component.ColliderType) && e.HasComponent(component.TransformType)
-}
-
+// isColliding checks the collision layer, and then sees if they collide
+// given their transform and collision box
 func isColliding(e1 *ecs.Entity, e2 *ecs.Entity) bool {
 	b1, ok1 := ecs.Get[*component.Collider](e1)
 	b2, ok2 := ecs.Get[*component.Collider](e2)

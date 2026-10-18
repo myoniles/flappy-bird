@@ -5,23 +5,11 @@ import (
 
 	"github.com/myoniles/vulcan/internal/ecs"
 	"github.com/myoniles/vulcan/internal/world/component"
-	"github.com/myoniles/vulcan/internal/world/state"
 )
 
 const ScoreUpEvent ecs.EventType = "CoinScored"
 
 func HandleCoinScored(w *ecs.World, e ecs.Event) {
-	if w.State() != state.Play {
-		return
-	}
-	if e.Verb != CollisionEvent {
-		return
-	}
-
-	if e.Subject == nil || e.Object == nil {
-		panic("These should never be nil")
-	}
-
 	var scorer *ecs.Entity = nil
 	var coin *ecs.Entity = nil
 	scorers := e.GetEntitiesWithComponent(component.ScorerType)
