@@ -18,7 +18,7 @@ type World struct {
 	deleted map[*Entity]struct{}
 }
 
-func NewWord(initial GameState) *World {
+func NewWorld(initial GameState) *World {
 	w := World{nextState: initial}
 	w.systems = make(map[GameState][]System)
 	w.deleted = make(map[*Entity]struct{})
@@ -148,7 +148,7 @@ func (w *World) processEvents() {
 		if !ok {
 			break
 		}
-		log.Printf("Processing Event: %p. Subject: %p, Object: %s, verb: 5s", &event.Subject, &event.Object, event.Verb)
+		log.Printf("Processing Event: %p. Subject: %p, Object: %s, verb: %s", &event.Subject, &event.Object, event.Verb)
 
 		// Handlers match on the current state, not the next one, so a handler
 		// that requests a transition can't trigger another state's handlers

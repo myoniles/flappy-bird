@@ -7,7 +7,7 @@ import (
 )
 
 func NewFlappyWorld() *ecs.World {
-	w := ecs.NewWord(state.Title)
+	w := ecs.NewWorld(state.Title)
 
 	// Systems
 	w.AddSystem(system.FlapSystem{})
